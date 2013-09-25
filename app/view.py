@@ -8,12 +8,19 @@ from controller import Logic
 
 @app.route('/check')
 def default():
-	return render_template("baselayout.html")
+  return render_template("baselayout.html")
 
-@app.route('/register')
-def register():
-	form = RegisterShopForm();
-	return render_template('registershop.html',form = form)
+@app.route('/shop/<operation>', methods = ['POST', 'GET'])
+def addshop(operation):
+  form = RegisterShopForm();
+  if request.method == "POST":
+                    
+    logicObject = Logic.Logic()
+    feedback = logicObject.execute(operation, form)
+    return render_template('feedback.html', feedback = feedback)
+
+  elif request.method == "GET":    
+    return render_template('registershop.html',form = form)
 
 #############################################################################################
 @app.route('/signup', methods=['GET', 'POST'])
@@ -59,7 +66,7 @@ def signout():
  
   if 'email' not in session:
     return redirect(url_for('signin'))
-     
+
   session.pop('email', None)
   return redirect(url_for('signin'))
 
@@ -88,6 +95,8 @@ def product_functions():
     #add the logic object here.
     if operation == "addcustomer":
       return redirect(url_for('addcustomer',operation=operation))
+    elif operation == "addshop":
+      return redirect(url_for('addshop', operation = operation))      
     else:
       return redirect(url_for('defaulterror')) 
 

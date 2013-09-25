@@ -4,15 +4,17 @@ from app.model.models import User
 
 # TODO: Remove this class from here
 class RegisterShopForm(Form):
-	shopname = TextField('shopname', validators = [validators.Required()])
-	location = TextField('location', validators = [validators.Required()])
-	shopid = TextField('userid', [validators.Length(min=5, max=25),validators.Required()])
-	password = PasswordField('password',[validators.Required()])
-	confirmpassword = PasswordField('confirmpassword',[validators.Required()])
-
+  shopId = TextField('shopId', validators = [validators.Required()])
+  city = TextField('city', validators = [validators.Required()])
+  country = TextField('country', validators = [validators.Required()])
+  address = TextAreaField('address', validator = [validators.Required()])
+  admin = TextField('admin', validators = [validators.Required()])
+  contactNumber = TextField('contactNumber', validators = [validators.Required()])
+    
+      
 class ShopAdminFunction(Form):
   operations = RadioField('operations', choices = [('addproduct','Add product'),('editproduct','Edit Product'),('removeproduct','Remove Product'),
-  ('addcustomer','Add Customer'),('editcustomer','Edit Customer'),('removecustomer','Remove Customer')])
+                                                   ('addcustomer','Add Customer'),('editcustomer','Edit Customer'),('removecustomer','Remove Customer'),('addshop','Add Shop')])
 
 class AddCustomer(Form):
   customername = TextField('customername', validators = [validators.Required()])
