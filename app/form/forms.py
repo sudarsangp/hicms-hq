@@ -7,11 +7,13 @@ class RegisterShopForm(Form):
   shopId = TextField('shopId', validators = [validators.Required()])
   city = TextField('city', validators = [validators.Required()])
   country = TextField('country', validators = [validators.Required()])
-  address = TextAreaField('address', validator = [validators.Required()])
+  address = TextAreaField('address', validators = [validators.Required()])
   admin = TextField('admin', validators = [validators.Required()])
   contactNumber = TextField('contactNumber', validators = [validators.Required()])
     
-      
+  def __init__(self, *args, **kwargs):
+    Form.__init__(self, *args, **kwargs)
+
 class ShopAdminFunction(Form):
   operations = RadioField('operations', choices = [('addproduct','Add product'),('editproduct','Edit Product'),('removeproduct','Remove Product'),
                                                    ('addcustomer','Add Customer'),('editcustomer','Edit Customer'),('removecustomer','Remove Customer'),('addshop','Add Shop')])

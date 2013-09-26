@@ -14,16 +14,33 @@ class Customer(db.Model):
   password = db.Column(db.String(256))
 
   def __init__(self,name, address, hp, email, dateOfJoining, password):
-      self.name = name
-      self.address = address
-      self.hp = hp
-      self.email = email
-      self.dateOfJoining = dateOfJoining
-      self.points = 0
-      self.password = password
+    self.name = name
+    self.address = address
+    self.hp = hp
+    self.email = email
+    self.dateOfJoining = dateOfJoining
+    self.points = 0
+    self.password = password
 
-    
+class Shops(db.Model):
 
+  __tablename__ = "shops"
+
+  shopId = db.Column(db.String(50), primary_key = True)
+  city = db.Column(db.String(256))
+  country = db.Column(db.String(256))
+  address = db.Column(db.String(256))
+  admin = db.Column(db.String(256))
+  contactNumber = db.Column(db.Integer)
+
+  def __init__(self,shopId, city, country, address, admin, contactNumber):
+    self.shopId = shopId
+    self.city = city
+    self.country = country
+    self.address = address
+    self.admin = admin
+    self.contactNumber = contactNumber
+ 
 """ nets tuts tutorial flask login """
 class User(db.Model):
   __tablename__ = 'users'
