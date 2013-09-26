@@ -2,7 +2,15 @@ from flask.ext.wtf import Form
 from wtforms import TextField, PasswordField, validators, BooleanField, TextAreaField, SubmitField, ValidationError, RadioField, DateField
 from app.model.models import User
 
-# TODO: Remove this class from here
+class LocationShopForm(Form):
+  city = TextField('city', validators = [validators.Required()])
+  country = TextField('country', validators = [validators.Required()])
+  tax = TextField('tax', validators = [validators.Required()])
+  distance = TextField('distance', validators = [validators.Required()])
+
+  def __init__(self, *args, **kwargs):
+    Form.__init__(self, *args, **kwargs)
+
 class RegisterShopForm(Form):
   shopId = TextField('shopId', validators = [validators.Required()])
   city = TextField('city', validators = [validators.Required()])

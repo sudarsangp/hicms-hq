@@ -2,7 +2,7 @@ from flask import render_template, flash, request, session, redirect, url_for
 from flask.ext.login import login_required
 from app import app, login_manager
 
-from form.forms import RegisterShopForm, SignupForm, SigninForm, ShopAdminFunction, AddCustomer, HQAdminFunction
+from form.forms import RegisterShopForm, SignupForm, SigninForm, ShopAdminFunction, AddCustomer, HQAdminFunction, LocationShopForm
 from model.models import Check, User, db, Customer
 from controller import Logic
 
@@ -10,17 +10,7 @@ from controller import Logic
 def default():
   return render_template("baselayout.html")
 
-@app.route('/shop/<operation>', methods = ['POST', 'GET'])
-def addshop(operation):
-  form = RegisterShopForm();
-  if request.method == "POST":
-                    
-    logicObject = Logic.Logic()
-    feedback = logicObject.execute(operation, form)
-    return render_template('feedback.html', feedback = feedback)
 
-  elif request.method == "GET":    
-    return render_template('registershop.html',form = form)
 
 #############################################################################################
 @app.route('/signup', methods=['GET', 'POST'])
@@ -88,10 +78,35 @@ def profile():
 def hq_functions():
   form = HQAdminFunction()
   if request.method == "POST":
-    return "post method called"
+    operation = form.operations.data
+
+    if operation == "addshop":
+      return redirect(url_for('enterlocation', operation = operation))   
 
   elif request.method == "GET":
     return render_template('HQshop_related_operation.html', form = form)
+
+@app.route('/location/<operation>', methods = ['POST', 'GET'])
+def enterlocation(operation):
+  form = LocationShopForm()
+  if request.method == "POST":
+    return redirect(url_for('addshop', operation = operation))
+
+  elif request.method == "GET":
+    return render_template('shoplocation.html', form = form)
+
+@app.route('/shop/<operation>', methods = ['POST', 'GET'])
+def addshop(operation):
+  form = RegisterShopForm()
+  if request.method == "POST":
+                    
+    logicObject = Logic.Logic()
+    feedback = logicObject.execute(operation, form)
+    return render_template('feedback.html', feedback = feedback)
+
+  elif request.method == "GET":    
+    return render_template('registershop.html',form = form)
+
 
 #for manually adding product to the database or shop
 @app.route('/product', methods = ['POST', 'GET'])
@@ -104,8 +119,7 @@ def product_functions():
     #add the logic object here.
     if operation == "addcustomer":
       return redirect(url_for('addcustomer',operation=operation))
-    elif operation == "addshop":
-      return redirect(url_for('addshop', operation = operation))      
+       
     else:
       return redirect(url_for('defaulterror')) 
 
@@ -125,7 +139,7 @@ def addcustomer(operation):
     
   elif request.method == 'GET':
     return render_template('addcustomer.html', form = form)
-    
+
 
 @app.route('/defaulterror')
 def defaulterror():
