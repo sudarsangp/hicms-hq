@@ -15,8 +15,12 @@ class RegisterShopForm(Form):
     Form.__init__(self, *args, **kwargs)
 
 class ShopAdminFunction(Form):
-  operations = RadioField('operations', choices = [('addproduct','Add product'),('editproduct','Edit Product'),('removeproduct','Remove Product'),
-                                                   ('addcustomer','Add Customer'),('editcustomer','Edit Customer'),('removecustomer','Remove Customer'),('addshop','Add Shop')])
+  operations = RadioField('operations', choices = [('addproduct', 'Add Product'),('editproduct','Edit Product'),('removeproduct','Remove Product'),
+                                                   ('addcustomer','Add Customer'),('editcustomer','Edit Customer'),('removecustomer','Remove Customer')])
+
+class HQAdminFunction(Form):
+  operations = RadioField('operations', choices = [('addshop','Add Shop')])
+
 
 class AddCustomer(Form):
   customername = TextField('customername', validators = [validators.Required()])

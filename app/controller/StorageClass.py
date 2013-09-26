@@ -4,7 +4,7 @@
      by the SQL-alchemy classes.
      
 '''
-from app.model.models import db, Customer
+from app.model.models import db, Customer, Shops
 from flask import session
 
 class StorageClass(object):
@@ -36,3 +36,16 @@ class StorageClass(object):
         #db.session.refresh(newCustomerData)
         #db.session.close()
         #return "from StorageClass"
+
+    def addShopTODatabase(self,formData):
+        newShopData = Shops(formData.shopId.data, formData.city.data, formData.country.data,
+                            formData.address.data, formData.admin.data, formData.contactNumber.data)
+        db.session.add(newShopData)
+        db.session.commit()
+
+    def shop_query_database(self, formData):
+        shopidquery = Shops.query.filter_by(shopId = formData.shopId.data).first()
+        if shopidquery:
+            return False
+        else:
+            return True

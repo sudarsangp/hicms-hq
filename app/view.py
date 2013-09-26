@@ -2,7 +2,7 @@ from flask import render_template, flash, request, session, redirect, url_for
 from flask.ext.login import login_required
 from app import app, login_manager
 
-from form.forms import RegisterShopForm, SignupForm, SigninForm, ShopAdminFunction, AddCustomer
+from form.forms import RegisterShopForm, SignupForm, SigninForm, ShopAdminFunction, AddCustomer, HQAdminFunction
 from model.models import Check, User, db, Customer
 from controller import Logic
 
@@ -83,6 +83,15 @@ def profile():
   else:
     return render_template('profile.html')
 ##############################################################################################
+
+@app.route('/hq', methods = ['POST', 'GET'])
+def hq_functions():
+  form = HQAdminFunction()
+  if request.method == "POST":
+    return "post method called"
+
+  elif request.method == "GET":
+    return render_template('HQshop_related_operation.html', form = form)
 
 #for manually adding product to the database or shop
 @app.route('/product', methods = ['POST', 'GET'])

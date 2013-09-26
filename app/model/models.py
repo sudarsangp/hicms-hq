@@ -41,6 +41,22 @@ class Shops(db.Model):
     self.admin = admin
     self.contactNumber = contactNumber
  
+class Location(db.Model):
+
+  __tablename__ = "location"
+
+  city = db.Column(db.String(256), primary_key = True)
+  country = db.Column(db.String(256), primary_key = True)
+  tax = db.Column(db.Float)
+  distance = db.Column(db.Float)
+
+  def __init__(self, city, country, tax, distance):
+    self.city = city
+    self.country = country
+    self.tax = tax
+    self.distance = distance
+
+
 """ nets tuts tutorial flask login """
 class User(db.Model):
   __tablename__ = 'users'

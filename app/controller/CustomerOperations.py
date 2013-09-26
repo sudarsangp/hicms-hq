@@ -44,3 +44,4 @@ class AddCustomer(Command):
         
     def __check_database(self, formData):
     	return self.storageObject.query_database(formData)
+

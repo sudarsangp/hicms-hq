@@ -10,12 +10,18 @@ Created on Sep 10, 2013
      
 '''
 from CustomerOperations import AddCustomer
+from ShopOperations import AddShop
+
 class CommandFactory(object):
     
     def createCommand(self,operation,formData):
         if operation == "addcustomer":
             addCustomerCommand = AddCustomer()
             return addCustomerCommand
+
+        elif operation == "addshop":
+        	addShopCommand = AddShop()
+        	return addShopCommand
         
         
     
