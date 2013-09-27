@@ -90,7 +90,14 @@ def hq_functions():
 def enterlocation(operation):
   form = LocationShopForm()
   if request.method == "POST":
-    return redirect(url_for('addshop', operation = operation))
+    local_operation = "addlocation"
+    logicObject = Logic.Logic()
+    feedback = logicObject.execute(local_operation, form)
+    if feedback.getinfo() == "Success: data added ":
+      return redirect(url_for('addshop', operation = operation))
+    else:
+      # this case no data already present
+      return redirect(url_for('addshop', operation = operation))#render_template('feedback.html', feedback = feedback)
 
   elif request.method == "GET":
     return render_template('shoplocation.html', form = form)

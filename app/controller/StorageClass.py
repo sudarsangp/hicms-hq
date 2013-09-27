@@ -4,7 +4,7 @@
      by the SQL-alchemy classes.
      
 '''
-from app.model.models import db, Customer, Shops
+from app.model.models import db, Customer, Shops, Location
 from flask import session
 
 class StorageClass(object):
@@ -49,3 +49,18 @@ class StorageClass(object):
             return False
         else:
             return True
+
+    def add_location_to_database(self, formData):
+        newLocationData = Location(formData.city.data, formData.country.data, 
+                                    formData.tax.data, formData.distance.data)
+        db.session.add(newLocationData)
+        db.session.commit()
+
+    def location_query_database(self, formData):
+        cityquery = Location.query.filter_by(city = formData.city.data).first()
+        countryquery = Location.query.filter_by(country = formData.country.data).first()
+        if cityquery and countryquery:
+            return False
+        else:
+            return True
+            

@@ -19,7 +19,7 @@ class AddCustomer(Command):
     
     def __init__(self):
     	self.storageObject = StorageClass()
-    	self.feedbackObject = Feedback()
+    	self.feedbackObject = Feedback(None, None, None)
  		
     def execute(self,formData):
 

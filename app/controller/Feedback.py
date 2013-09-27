@@ -1,13 +1,15 @@
 
 class Feedback(object):
 
-	def __init__(self):
-		pass
+	def __init__(self,commandtype, info, data):
+		self.commandtype = commandtype
+		self.info = info
+		self.data = data
 
 	def setinfo(self, info):
 		self.info = info
 
-	def getinfor(self):
+	def getinfo(self):
 		return self.info
 
 	def setdata(self, data):
@@ -21,3 +23,9 @@ class Feedback(object):
 
 	def getcommandtype(self):
 		return self.commandtype
+
+	def checkinfo(self, info):
+		if self.info == info :
+			return True
+		else:
+			return False

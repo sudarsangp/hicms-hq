@@ -1,0 +1,17 @@
+{% extends "baselayout.html" %}
+
+{% block content %}
+<form action="" method="post" name="locationshop">
+	<p> Enter City
+		{{form.city}}<br>
+		Enter Country
+		{{form.country}}<br>
+		Enter Tax
+		{{form.tax}}<br>
+		Enter Distance
+		{{form.distance}}<br>
+	    
+		<p><input type="submit" value="Submit">
+	</p>
+</form>
+{% endblock %}
