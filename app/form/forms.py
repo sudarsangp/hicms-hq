@@ -1,5 +1,5 @@
 from flask.ext.wtf import Form
-from wtforms import TextField, PasswordField, validators, BooleanField, TextAreaField, SubmitField, ValidationError, RadioField, DateField
+from wtforms import TextField, PasswordField, validators, BooleanField, TextAreaField, SubmitField, ValidationError, RadioField, DateField, FormField, SelectField
 from app.model.models import User
 
 class LocationShopForm(Form):
@@ -13,8 +13,9 @@ class LocationShopForm(Form):
 
 class RegisterShopForm(Form):
   shopId = TextField('shopId', validators = [validators.Required()])
-  city = TextField('city', validators = [validators.Required()])
-  country = TextField('country', validators = [validators.Required()])
+  city = SelectField('city', choices=[('chennai','Chennai'),('none','None')])
+  country = SelectField('country', choices=[('india','India'),('none','None')])
+  emformlocation = FormField(LocationShopForm)
   address = TextAreaField('address', validators = [validators.Required()])
   admin = TextField('admin', validators = [validators.Required()])
   contactNumber = TextField('contactNumber', validators = [validators.Required()])

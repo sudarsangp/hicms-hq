@@ -1,13 +1,20 @@
 {% extends "baselayout.html" %}
 
 {% block content %}
+
 <form action="" method="post" name="registershop">
 	<p> Enter Shop Id 
 		{{form.shopId}}<br>
+		<div id="citycountry">
 		Enter City
 		{{form.city}}<br>
 		Enter Country
 		{{form.country}}<br>
+		</div>
+		<div class="tohide">
+		Enter LocationForm Details
+		{{form.emformlocation}}
+		</div>
 		Enter Address
 		{{form.address}}<br>
 		Enter admin detail
@@ -17,4 +24,5 @@
 		<p><input type="submit" value="Regsiter">
 	</p>
 </form>
+<script src="{{ url_for('static',filename='js/locationshop.js') }}" type="text/javascript"></script> 
 {% endblock %}

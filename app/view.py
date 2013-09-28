@@ -108,6 +108,11 @@ def addshop(operation):
   if request.method == "POST":
                     
     logicObject = Logic.Logic()
+    
+    if form.city.data == "none" or form.country.data == "none" :
+      logicObject.execute("addlocation",form.emformlocation)
+      form.city.data = form.emformlocation.city.data
+      form.country.data = form.emformlocation.country.data
     feedback = logicObject.execute(operation, form)
     return render_template('feedback.html', feedback = feedback)
 
