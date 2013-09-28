@@ -13,8 +13,8 @@ class LocationShopForm(Form):
 
 class RegisterShopForm(Form):
   shopId = TextField('shopId', validators = [validators.Required()])
-  city = SelectField('city', choices=[('chennai','Chennai'),('none','None')])
-  country = SelectField('country', choices=[('india','India'),('none','None')])
+  city = SelectField('city', choices=[])
+  country = SelectField('country', choices=[])
   emformlocation = FormField(LocationShopForm)
   address = TextAreaField('address', validators = [validators.Required()])
   admin = TextField('admin', validators = [validators.Required()])

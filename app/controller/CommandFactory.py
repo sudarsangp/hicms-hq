@@ -11,7 +11,7 @@ Created on Sep 10, 2013
 '''
 from CustomerOperations import AddCustomer
 from ShopOperations import AddShop
-from LocationOperations import AddLocation
+from LocationOperations import AddLocation, ViewLocation
 
 class CommandFactory(object):
     
@@ -27,6 +27,10 @@ class CommandFactory(object):
         elif operation == "addlocation":
         	addLocationCommand = AddLocation()
         	return addLocationCommand
+
+        elif operation == "viewlocation":
+            viewLocationCommand = ViewLocation()
+            return viewLocationCommand
         
         
     

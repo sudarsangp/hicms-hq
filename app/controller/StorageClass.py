@@ -64,3 +64,6 @@ class StorageClass(object):
         else:
             return True
             
+    def get_all_location(self, fromData):
+        existinglocation = Location.query.all()
+        return existinglocation

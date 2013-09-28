@@ -104,10 +104,19 @@ def enterlocation(operation):
 
 @app.route('/shop/<operation>', methods = ['POST', 'GET'])
 def addshop(operation):
+  logicObject = Logic.Logic()
+  locationsall = logicObject.execute('viewlocation',None)
+  location_choices_city = [(locationobj.city, locationobj.city) for locationobj in locationsall]
+  location_choices_country = [(locationobj.country, locationobj.country) for locationobj in locationsall]
+
+  
+  #location_choices_city, location_choices_country = [(locationobj.city,locationobj.city),(locationobj.country,locationobj.country) for locationobj in locationsall]
+  location_choices_city.append(('-1','None'))
+  location_choices_country.append(('-1', 'None'))
   form = RegisterShopForm()
-  if request.method == "POST":
-                    
-    logicObject = Logic.Logic()
+  form.city.choices = location_choices_city
+  form.country.choices = location_choices_country
+  if request.method == "POST": 
     
     if form.city.data == "none" or form.country.data == "none" :
       logicObject.execute("addlocation",form.emformlocation)

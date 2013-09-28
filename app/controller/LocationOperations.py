@@ -20,3 +20,14 @@ class AddLocation(Command):
 
     def __check_database(self, formData):
         return self.storageObject.location_query_database(formData)
+
+class ViewLocation(Command):
+    def __init__(self):
+        self.storageObject = StorageClass()
+        self.feedbackObject = Feedback(None, None, None)
+
+    def execute(self, formData):
+        return self.get_locations(formData)
+
+    def get_locations(self, formData):
+        return self.storageObject.get_all_location(formData)
