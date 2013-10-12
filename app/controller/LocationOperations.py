@@ -5,7 +5,7 @@ from Feedback import Feedback
 class AddLocation(Command): 
     def __init__(self):
         self.storageObject = StorageClass()
-        self.feedbackObject = Feedback(None, None, None)
+        self.feedbackObject = Feedback()
 
     def execute(self,formData):
 
@@ -13,7 +13,7 @@ class AddLocation(Command):
 
             self.storageObject.add_location_to_database(formData)
             self.feedbackObject.setinfo("Success: data added ")
-            self.feedbackObject.setdata(formData)
+            self.feedbackObject.setdata(formData.country.data)
             self.feedbackObject.setcommandtype("AddLocation")
 
         return self.feedbackObject
@@ -24,7 +24,7 @@ class AddLocation(Command):
 class ViewLocation(Command):
     def __init__(self):
         self.storageObject = StorageClass()
-        self.feedbackObject = Feedback(None, None, None)
+        self.feedbackObject = Feedback()
 
     def execute(self, formData):
         return self.get_locations(formData)

@@ -1,10 +1,8 @@
 
 class Feedback(object):
 
-	def __init__(self,commandtype, info, data):
-		self.commandtype = commandtype
-		self.info = info
-		self.data = data
+	def __init__(self):
+		pass
 
 	def setinfo(self, info):
 		self.info = info
