@@ -5,7 +5,7 @@ from Feedback import Feedback
 class AddShop(Command):
     def __init__(self):
         self.storageObject = StorageClass()
-        self.feedbackObject = Feedback(None, None, None)
+        self.feedbackObject = Feedback()
 
     def execute(self,formData):
 
@@ -13,7 +13,7 @@ class AddShop(Command):
 
             self.storageObject.addShopTODatabase(formData)
             self.feedbackObject.setinfo("Success: data added ")
-            self.feedbackObject.setdata(formData)
+            self.feedbackObject.setdata(formData.shopId.data)
             self.feedbackObject.setcommandtype("AddShop")
 
         return self.feedbackObject
