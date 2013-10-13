@@ -1,0 +1,30 @@
+{% extends "baselayout.html" %}
+ 
+{% block content %}
+
+<h3> All Shops Information </h3>
+<table class="table">
+<thead>
+	<tr>
+		<th> Shop ID </th>
+		<th> City </th>
+		<th> Country </th>
+		<th> Address </th>
+		<th> Admin </th>
+		<th> Contact Number </th>
+	</tr>
+</thead>
+<tbody>
+{% for shopobj in allshops %}
+<tr>
+<td>{{ shopobj.shopId }} </td>
+<td>{{ shopobj.city }}  </td>
+<td>{{ shopobj.country }}</td>
+<td>{{ shopobj.address }} </td>
+<td>{{ shopobj.admin }} </td>
+<td>{{ shopobj.contactNumber }} </td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}

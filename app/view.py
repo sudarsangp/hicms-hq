@@ -85,6 +85,9 @@ def hq_functions():
     if operation == "addshop":
       return redirect(url_for('addshop', operation = operation))   
     
+    elif operation == "viewshops":
+      return redirect(url_for('view_all_shops', operation = operation))
+
     elif operation == "addlocation":
       return redirect(url_for('enterlocation', operation = operation))   
      
@@ -93,11 +96,17 @@ def hq_functions():
 
     elif operation == "viewproducts":
       return redirect(url_for('view_all_products',operation = operation))
-      
+
     else:
       return "Mapping not yet implemented"
   elif request.method == "GET":
     return render_template('HQshop_related_operation.html', form = form)
+
+@app.route('/displayshops/<operation>')
+def view_all_shops(operation):
+  logicObject = Logic.Logic()
+  allshops = logicObject.execute(operation, None)
+  return render_template('listingshops.html', allshops = allshops)
 
 @app.route('/location/<operation>', methods = ['POST', 'GET'])
 def enterlocation(operation):
@@ -167,7 +176,7 @@ def search_barcode(operation):
   elif request.method == 'GET':
     return render_template('searchbarcode.html',form = form)
 
-@app.route('/displayall/<operation>', methods = ['POST','GET'])
+@app.route('/productdisplayall/<operation>')
 def view_all_products(operation):
   logicObject = Logic.Logic()
   allproducts = logicObject.execute(operation, None)

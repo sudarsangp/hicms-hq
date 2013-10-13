@@ -56,13 +56,12 @@ class AddProduct(Command):
 class ViewProduct(Command):
     def __init__(self):
         self.storageObject = StorageClass()
-        self.feedbackObject = Feedback()
 
     def execute(self, formData):
-        return self.get_products(formData)
+        return self.get_products()
 
-    def get_products(self, formData):
-        return self.storageObject.get_products_from_db(formData)
+    def get_products(self):
+        return self.storageObject.get_products_from_db()
 
 class SearchProductBarcode(Command):
     def __init__(self):

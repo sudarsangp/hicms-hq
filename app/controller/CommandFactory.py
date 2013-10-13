@@ -10,7 +10,7 @@ Created on Sep 10, 2013
      
 '''
 from CustomerOperations import AddCustomer
-from ShopOperations import AddShop
+from ShopOperations import AddShop, ViewShops
 from LocationOperations import AddLocation, ViewLocation
 from StockOperations import AddStock
 from ManufacturerOperations import AddManufacturer,ViewManufacturers
@@ -28,6 +28,10 @@ class CommandFactory(object):
         elif operation == "addshop":
         	addShopCommand = AddShop()
         	return addShopCommand
+
+        elif operation == "viewshops":
+            viewShopCommand = ViewShops()
+            return viewShopCommand
 
         elif operation == "addlocation":
         	addLocationCommand = AddLocation()

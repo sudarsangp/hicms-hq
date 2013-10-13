@@ -137,7 +137,7 @@ class StorageClass(object):
         existingCategories = Category.query.all()
         return existingCategories    
 
-    def get_products_from_db(self, formData):
+    def get_products_from_db(self):
         existingProduct = Products.query.all()
         return existingProduct
 
@@ -153,4 +153,8 @@ class StorageClass(object):
     def get_product_for_barcode(self,enteredBarcode):
         existingProduct = Products.query.filter_by(barcode = enteredBarcode).first()
         return existingProduct
+
+    def get_shops_from_db(self):
+        existingShops = Shops.query.all()
+        return existingShops
     

@@ -41,7 +41,7 @@ class ShopAdminFunction(Form):
   operations = RadioField('operations', choices = [('searchBarcode','Search Barcode'),('viewproducts','View Product')])
 
 class HQAdminFunction(Form):
-  operations = RadioField('operations', choices = [('addshop','Add Shop'),('addlocation','Add Location'),('addproduct','Add Product'),
+  operations = RadioField('operations', choices = [('addshop','Add Shop'),('viewshops','View Shops'),('addlocation','Add Location'),('addproduct','Add Product'),
     ('addcategory','Add Category'),('addmanufacturer','Add Manufacturer'),('addcustomer','Add Customer'),('addstock', 'Add Stock'),
     ('viewproducts','View Products'),
     ('editproduct','Edit Product'),('editcustomer','Edit Customer'),
