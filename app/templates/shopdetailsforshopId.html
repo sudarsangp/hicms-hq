@@ -1,0 +1,28 @@
+{% extends "baselayout.html" %}
+ 
+{% block content %}
+
+<h3> Single Shop Information </h3>
+<table class="table">
+<thead>
+	<tr>
+		<th> Shop ID </th>
+		<th> City </th>
+		<th> Country </th>
+		<th> Address </th>
+		<th> Admin </th>
+		<th> Contact Number </th>
+	</tr>
+</thead>
+<tbody>
+<tr>
+<td>{{ singleshop.shopId }} </td>
+<td>{{ singleshop.city }}  </td>
+<td>{{ singleshop.country }}</td>
+<td>{{ singleshop.address }} </td>
+<td>{{ singleshop.admin }} </td>
+<td>{{ singleshop.contactNumber }} </td>
+</tr>
+</tbody>
+</table>
+{% endblock %}

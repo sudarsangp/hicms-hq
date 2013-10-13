@@ -24,7 +24,6 @@ def validateNumber(form,field):
   if re.match("^\D+$",s):
     raise ValidationError('please enter only numbers')
 
-# TODO: Remove this class from here
 class RegisterShopForm(Form):
   shopId = TextField('shopId', validators = [validators.Required()])
   city = SelectField('city', choices=[])
@@ -37,13 +36,20 @@ class RegisterShopForm(Form):
   def __init__(self, *args, **kwargs):
     Form.__init__(self, *args, **kwargs)
 
+class RetrieveShop(Form):
+  shopId = TextField('shopId')
+
+  def __init__(self, *args, **kwargs):
+    Form.__init__(self, *args, **kwargs)
+
 class ShopAdminFunction(Form):
   operations = RadioField('operations', choices = [('searchBarcode','Search Barcode'),('viewproducts','View Product')])
 
 class HQAdminFunction(Form):
-  operations = RadioField('operations', choices = [('addshop','Add Shop'),('viewshops','View Shops'),('addlocation','Add Location'),('addproduct','Add Product'),
+  operations = RadioField('operations', choices = [('addshop','Create Shop'),('retrieveshop', 'Retrieve Shop'),('updateshop','Update Shop'),('deleteshop','Delete Shop'),('viewshops','List All Shops'),
+    ('addlocation','Add Location'),('addproduct','Add Product'),
     ('addcategory','Add Category'),('addmanufacturer','Add Manufacturer'),('addcustomer','Add Customer'),('addstock', 'Add Stock'),
-    ('viewproducts','View Products'),
+    ('viewproducts','View All Products'),
     ('editproduct','Edit Product'),('editcustomer','Edit Customer'),
     ('removeproduct','Remove Product'),('removecustomer','Remove Customer')])
 

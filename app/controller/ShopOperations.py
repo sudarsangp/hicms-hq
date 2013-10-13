@@ -31,4 +31,12 @@ class ViewShops(Command):
     def get_shops(self):
         return self.storageObject.get_shops_from_db()
 
-        
+class RetrieveShop(Command):
+    def __init__(self):
+        self.storageObject = StorageClass()
+
+    def execute(self, formData):
+        return self.get_shop_for_shopid(formData)
+
+    def get_shop_for_shopid(self, formData):
+        return self.storageObject.get_shop_shopid_from_db(formData.shopId.data)

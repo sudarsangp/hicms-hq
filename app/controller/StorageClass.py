@@ -158,3 +158,6 @@ class StorageClass(object):
         existingShops = Shops.query.all()
         return existingShops
     
+    def get_shop_shopid_from_db(self, enteredShopId):
+        existingShopForShopId = Shops.query.filter_by(shopId = enteredShopId).first()
+        return existingShopForShopId

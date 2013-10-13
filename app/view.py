@@ -3,7 +3,7 @@ from flask.ext.login import login_required
 from app import app, login_manager
 
 from form.forms import RegisterShopForm, SignupForm, SigninForm, ShopAdminFunction, AddCustomer ,AddManufacturer , AddStock, AddCategory, AddProduct, BuyItem
-from form.forms import SearchBarcode, LocationShopForm, HQAdminFunction
+from form.forms import SearchBarcode, LocationShopForm, HQAdminFunction, RetrieveShop
 
 from model.models import Check, User, db, Customer
 from controller import Logic
@@ -85,6 +85,9 @@ def hq_functions():
     if operation == "addshop":
       return redirect(url_for('addshop', operation = operation))   
     
+    elif operation == "retrieveshop":
+      return redirect(url_for('retrieve_shop', operation = operation))
+
     elif operation == "viewshops":
       return redirect(url_for('view_all_shops', operation = operation))
 
@@ -101,6 +104,22 @@ def hq_functions():
       return "Mapping not yet implemented"
   elif request.method == "GET":
     return render_template('HQshop_related_operation.html', form = form)
+
+@app.route('/retrieveshop/<operation>', methods = ['POST','GET'])
+def retrieve_shop(operation):
+  form = RetrieveShop()
+  if request.method == "POST":
+    logicObject = Logic.Logic()
+    singleshop = logicObject.execute(operation,form)
+    if singleshop:
+      return render_template('shopdetailsforshopId.html', singleshop = singleshop)
+    else:
+      return redirect(url_for('defaulterror'))
+
+  elif request.method == 'GET':
+    return render_template('retrieveshopId.html',form = form)
+  
+
 
 @app.route('/displayshops/<operation>')
 def view_all_shops(operation):
