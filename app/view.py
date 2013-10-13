@@ -91,6 +91,9 @@ def hq_functions():
     elif operation == "addproduct":
       return redirect(url_for('addproduct',operation = operation))  
 
+    elif operation == "viewproducts":
+      return redirect(url_for('view_all_products',operation = operation))
+      
     else:
       return "Mapping not yet implemented"
   elif request.method == "GET":
