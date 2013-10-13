@@ -171,9 +171,15 @@ class StorageClass(object):
         return existingShopForShopId
 
     def set_shop_details(self, formData):
-        print formData.shopId.data
+
         updateshop = Shops.query.filter_by(shopId = formData.shopId.data).first()
         updateshop.address = formData.address.data
         updateshop.admin = formData.admin.data
         updateshop.contactNumber = formData.contactNumber.data
         db.session.commit()
+
+    def delete_shop_info(self, enteredShopId):
+        shoptodelete = Shops.query.filter_by(shopId = enteredShopId).first()
+        db.session.delete(shoptodelete)
+        db.session.commit()
+        

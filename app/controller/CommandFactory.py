@@ -10,7 +10,7 @@ Created on Sep 10, 2013
      
 '''
 from CustomerOperations import AddCustomer
-from ShopOperations import AddShop, ViewShops, RetrieveShop, UpdateShop
+from ShopOperations import AddShop, ViewShops, RetrieveShop, UpdateShop, DeleteShop
 from LocationOperations import AddLocation, ViewLocation
 from StockOperations import AddStock
 from ManufacturerOperations import AddManufacturer,ViewManufacturers
@@ -36,6 +36,10 @@ class CommandFactory(object):
         elif operation == "updateshop":
             updateShopCommand = UpdateShop()
             return updateShopCommand
+
+        elif operation == "deleteshop":
+            deleteShopCommand = DeleteShop()
+            return deleteShopCommand
 
         elif operation == "viewshops":
             viewShopCommand = ViewShops()

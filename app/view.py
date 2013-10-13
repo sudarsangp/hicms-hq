@@ -91,6 +91,9 @@ def hq_functions():
     elif operation == "updateshop":
       return redirect(url_for('update_shop', operation = operation))
 
+    elif operation == "deleteshop":
+      return redirect(url_for('delete_shop', operation = operation))
+
     elif operation == "viewshops":
       return redirect(url_for('view_all_shops', operation = operation))
 
@@ -107,6 +110,17 @@ def hq_functions():
       return "Mapping not yet implemented"
   elif request.method == "GET":
     return render_template('HQshop_related_operation.html', form = form)
+
+@app.route('/deleteshop/<operation>', methods = ['POST', 'GET'])
+def delete_shop(operation):
+  form = RetrieveShop()
+  if request.method == "POST":
+    logicObject = Logic.Logic()
+    feedback = logicObject.execute(operation, form)
+    return render_template('feedback.html', feedback = feedback)
+
+  elif request.method == 'GET':
+    return render_template('retrieveshopId.html',form = form)
 
 @app.route('/updateshop/<operation>', methods = ['POST','GET'])
 def update_shop(operation):
@@ -132,14 +146,17 @@ def check_update(formshopid):
     
     updateshopinfo.shopId.data = formshopid
     retrievehopinfo = logicObject.execute("retrieveshop", updateshopinfo)
-    updateshopinfo.shopId = retrievehopinfo.shopId
-    updateshopinfo.city = retrievehopinfo.city
-    updateshopinfo.country = retrievehopinfo.country
-    updateshopinfo.address.data = retrievehopinfo.address
-    updateshopinfo.admin.data = retrievehopinfo.admin
-    updateshopinfo.contactNumber.data = retrievehopinfo.contactNumber
+    if retrievehopinfo:
+      updateshopinfo.shopId = retrievehopinfo.shopId
+      updateshopinfo.city = retrievehopinfo.city
+      updateshopinfo.country = retrievehopinfo.country
+      updateshopinfo.address.data = retrievehopinfo.address
+      updateshopinfo.admin.data = retrievehopinfo.admin
+      updateshopinfo.contactNumber.data = retrievehopinfo.contactNumber
+      return render_template('updateshopforshopId.html', updateshopinfo = updateshopinfo)
 
-    return render_template('updateshopforshopId.html', updateshopinfo = updateshopinfo)
+    else:
+      return redirect(url_for('defaulterror'))
 
 @app.route('/retrieveshop/<operation>', methods = ['POST','GET'])
 def retrieve_shop(operation):
