@@ -40,3 +40,18 @@ class RetrieveShop(Command):
 
     def get_shop_for_shopid(self, formData):
         return self.storageObject.get_shop_shopid_from_db(formData.shopId.data)
+
+class UpdateShop(Command):
+    def __init__(self):
+        self.storageObject = StorageClass()
+        self.feedbackObject = Feedback()
+        
+    def execute(self, formData):
+        print formData.shopId.data
+        self.storageObject.set_shop_details(formData)
+        self.feedbackObject.setinfo("Success: data updated ")
+        self.feedbackObject.setdata(formData.shopId.data)
+        self.feedbackObject.setcommandtype("Update Shop")
+        return self.feedbackObject
+        
+        

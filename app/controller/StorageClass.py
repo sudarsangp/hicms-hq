@@ -128,7 +128,15 @@ class StorageClass(object):
             return False
         else:
             return True    
-    
+
+    def check_if_Shop_exists(self,formData):
+        shop_id = Shops.query.filter_by( shopId = formData.shopId.data).first()
+        
+        if shop_id:
+            return True
+        else:
+            return False
+
     def get_manufacturers_from_db(self,formData):
         existingManufacturers = Manufacturers.query.all()
         return existingManufacturers    
@@ -161,3 +169,11 @@ class StorageClass(object):
     def get_shop_shopid_from_db(self, enteredShopId):
         existingShopForShopId = Shops.query.filter_by(shopId = enteredShopId).first()
         return existingShopForShopId
+
+    def set_shop_details(self, formData):
+        print formData.shopId.data
+        updateshop = Shops.query.filter_by(shopId = formData.shopId.data).first()
+        updateshop.address = formData.address.data
+        updateshop.admin = formData.admin.data
+        updateshop.contactNumber = formData.contactNumber.data
+        db.session.commit()

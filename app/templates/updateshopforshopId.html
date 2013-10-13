@@ -1,0 +1,31 @@
+{% extends "baselayout.html" %}
+ 
+{% block content %}
+
+<h3> Update Shop Information </h3>
+<form action = "" method = post>
+<table class="table">
+<thead>
+	<tr>
+		<th> Shop ID </th>
+		<th> City </th>
+		<th> Country </th>
+		<th> Address </th>
+		<th> Admin </th>
+		<th> Contact Number </th>
+	</tr>
+</thead>
+<tbody>
+<tr>
+<td>{{ updateshopinfo.shopId }} </td>
+<td>{{ updateshopinfo.city }}  </td>
+<td>{{ updateshopinfo.country }}</td>
+<td>{{ updateshopinfo.address }} </td>
+<td>{{ updateshopinfo.admin }} </td>
+<td>{{ updateshopinfo.contactNumber }} </td>
+</tr>
+</tbody>
+</table>
+<input type="submit" value="Update Shop">
+</form>
+{% endblock %}

@@ -3,7 +3,7 @@ from flask.ext.login import login_required
 from app import app, login_manager
 
 from form.forms import RegisterShopForm, SignupForm, SigninForm, ShopAdminFunction, AddCustomer ,AddManufacturer , AddStock, AddCategory, AddProduct, BuyItem
-from form.forms import SearchBarcode, LocationShopForm, HQAdminFunction, RetrieveShop
+from form.forms import SearchBarcode, LocationShopForm, HQAdminFunction, RetrieveShop, UpdateShopForm
 
 from model.models import Check, User, db, Customer
 from controller import Logic
@@ -88,6 +88,9 @@ def hq_functions():
     elif operation == "retrieveshop":
       return redirect(url_for('retrieve_shop', operation = operation))
 
+    elif operation == "updateshop":
+      return redirect(url_for('update_shop', operation = operation))
+
     elif operation == "viewshops":
       return redirect(url_for('view_all_shops', operation = operation))
 
@@ -105,6 +108,39 @@ def hq_functions():
   elif request.method == "GET":
     return render_template('HQshop_related_operation.html', form = form)
 
+@app.route('/updateshop/<operation>', methods = ['POST','GET'])
+def update_shop(operation):
+  form = RetrieveShop()
+  if request.method == "POST":
+    
+    formshopid = form.shopId.data
+    return redirect(url_for('check_update',formshopid = formshopid ))
+
+  elif request.method == 'GET':
+    return render_template('retrieveshopId.html',form = form)
+
+@app.route('/tocheckupdate/<formshopid>', methods = ['POST', 'GET'])
+def check_update(formshopid):
+  updateshopinfo = UpdateShopForm()
+  logicObject = Logic.Logic()
+  if request.method == "POST":
+    updateshopinfo.shopId.data = formshopid
+    feedback = logicObject.execute("updateshop", updateshopinfo)
+    return render_template('feedback.html', feedback = feedback)
+
+  elif request.method == 'GET':
+    
+    updateshopinfo.shopId.data = formshopid
+    retrievehopinfo = logicObject.execute("retrieveshop", updateshopinfo)
+    updateshopinfo.shopId = retrievehopinfo.shopId
+    updateshopinfo.city = retrievehopinfo.city
+    updateshopinfo.country = retrievehopinfo.country
+    updateshopinfo.address.data = retrievehopinfo.address
+    updateshopinfo.admin.data = retrievehopinfo.admin
+    updateshopinfo.contactNumber.data = retrievehopinfo.contactNumber
+
+    return render_template('updateshopforshopId.html', updateshopinfo = updateshopinfo)
+
 @app.route('/retrieveshop/<operation>', methods = ['POST','GET'])
 def retrieve_shop(operation):
   form = RetrieveShop()
@@ -119,8 +155,6 @@ def retrieve_shop(operation):
   elif request.method == 'GET':
     return render_template('retrieveshopId.html',form = form)
   
-
-
 @app.route('/displayshops/<operation>')
 def view_all_shops(operation):
   logicObject = Logic.Logic()

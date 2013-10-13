@@ -36,6 +36,17 @@ class RegisterShopForm(Form):
   def __init__(self, *args, **kwargs):
     Form.__init__(self, *args, **kwargs)
 
+class UpdateShopForm(Form):
+  shopId = TextField('shopId', validators = [validators.Required()])
+  city = TextField('city', validators = [validators.Required()])
+  country = TextField('country', validators = [validators.Required()])
+  address = TextAreaField('address', validators = [validators.Required()])
+  admin = TextField('admin', validators = [validators.Required()])
+  contactNumber = TextField('contactNumber', validators = [validators.Required()])
+
+  def __init__(self, *args, **kwargs):
+      Form.__init__(self, *args, **kwargs)
+
 class RetrieveShop(Form):
   shopId = TextField('shopId')
 
