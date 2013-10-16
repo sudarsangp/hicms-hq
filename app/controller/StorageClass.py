@@ -182,4 +182,14 @@ class StorageClass(object):
         shoptodelete = Shops.query.filter_by(shopId = enteredShopId).first()
         db.session.delete(shoptodelete)
         db.session.commit()
-        
+    
+    def set_product_details(self, formData):
+
+        updateproduct = Products.query.filter_by(barcode = formData.barcode.data).first()
+        updateproduct.price = formData.price.data
+        updateproduct.minStock = formData.minStock.data
+        updateproduct.currentStock = formData.currentStock.data
+        updateproduct.bundleUnit = formData.bundleUnit.data
+        updateproduct.displayPrice = formData.displayPrice.data
+        updateproduct.displayQty = formData.displayQty.data
+        db.session.commit()

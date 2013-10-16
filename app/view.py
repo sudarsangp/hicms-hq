@@ -3,7 +3,7 @@ from flask.ext.login import login_required
 from app import app, login_manager
 
 from form.forms import RegisterShopForm, SignupForm, SigninForm, ShopAdminFunction, AddCustomer ,AddManufacturer , AddStock, AddCategory, AddProduct, BuyItem
-from form.forms import SearchBarcode, LocationShopForm, HQAdminFunction, RetrieveShop, UpdateShopForm
+from form.forms import SearchBarcode, LocationShopForm, HQAdminFunction, RetrieveShop, UpdateShopForm, UpdateProductForm
 
 from model.models import Check, User, db, Customer
 from controller import Logic
@@ -103,6 +103,9 @@ def hq_functions():
     elif operation == "retrieveproduct":
       return redirect(url_for('retrieve_product', operation = operation))
 
+    elif operation == "updateproduct":
+      return redirect(url_for('update_product', operation = operation))
+
     elif operation == "viewproducts":
       return redirect(url_for('view_all_products',operation = operation))
 
@@ -114,10 +117,49 @@ def hq_functions():
   elif request.method == "GET":
     return render_template('HQshop_related_operation.html', form = form)
 
+@app.route('/updateproduct/<operation>', methods = ['POST', 'GET'])
+def update_product(operation):
+  form = SearchBarcode()
+  if request.method == "POST":
+    formbarcode = form.barcode.data
+    return redirect(url_for('actual_updateproduct', formbarcode = formbarcode))
+
+  elif request.method == 'GET':
+    return render_template('searchbarcode.html', form = form)
+
+@app.route('/toupdateproduct/<formbarcode>', methods = ['POST', 'GET'])
+def actual_updateproduct(formbarcode):
+  updateproductinfo = UpdateProductForm()
+  logicObject = Logic.Logic()
+  if request.method == "POST":
+    updateproductinfo.barcode.data = formbarcode
+    feedback = logicObject.execute("updateproduct", updateproductinfo)
+    return render_template('feedback.html', feedback = feedback)
+
+  elif request.method == 'GET':
+    
+    updateproductinfo.barcode.data = formbarcode
+    retrieveproductinfo = logicObject.execute("retrieveproduct", updateproductinfo)
+    if retrieveproductinfo:
+      updateproductinfo.barcode = retrieveproductinfo.barcode
+      updateproductinfo.proname = retrieveproductinfo.name
+      updateproductinfo.manufacturerId = retrieveproductinfo.manufacturerId
+      updateproductinfo.category = retrieveproductinfo.category
+      updateproductinfo.price.data = retrieveproductinfo.price
+      updateproductinfo.minStock.data = retrieveproductinfo.minStock
+      updateproductinfo.currentStock.data = retrieveproductinfo.currentStock
+      updateproductinfo.bundleUnit.data = retrieveproductinfo.bundleUnit
+      updateproductinfo.displayPrice.data = retrieveproductinfo.displayPrice
+      updateproductinfo.displayQty.data = retrieveproductinfo.displayQty
+      
+      return render_template('updateproductforbarcode.html', updateproductinfo = updateproductinfo)
+
+    else:
+      return redirect(url_for('defaulterror'))
+      
 @app.route('/retrieveproduct/<operation>', methods = ['POST', 'GET'])
 def retrieve_product(operation):
   return redirect(url_for('search_barcode', operation = operation))
-
 
 @app.route('/deleteshop/<operation>', methods = ['POST', 'GET'])
 def delete_shop(operation):

@@ -82,3 +82,22 @@ class RetrieveProduct(Command):
 
     def get_product_barcode_db(self, formData):
         return self.storageObject.get_product_for_barcode(formData.barcode.data)
+
+class UpdateProduct(Command):
+    def __init__(self):
+        self.storageObject = StorageClass()
+        self.feedbackObject = Feedback()
+        
+    def execute(self, formData):
+        inverted = self.storageObject.check_if_Product_exists(formData)
+        actual = not inverted
+        if actual:
+            self.storageObject.set_product_details(formData)
+            self.feedbackObject.setinfo("Success: data updated ")
+            self.feedbackObject.setdata(formData.shopId.data)
+            self.feedbackObject.setcommandtype("Update Shop")
+        else:
+            self.feedbackObject.setinfo("Failed: shopid not found ")
+            self.feedbackObject.setdata("Shop id not found")
+            self.feedbackObject.setcommandtype("Update Shop")
+        return self.feedbackObject

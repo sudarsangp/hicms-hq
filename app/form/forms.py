@@ -108,6 +108,21 @@ class AddProduct(Form):
   def __init__(self, *args, **kwargs):
     Form.__init__(self, *args, **kwargs)  
 
+class UpdateProductForm(Form):
+  barcode = TextField('barcode')
+  proname = TextField('name')
+  manufacturerId = TextField('manufacturerId')
+  category = TextField('category')
+  price = TextField('price')
+  minStock = TextField('minStock')
+  currentStock = TextField('currentStock')
+  bundleUnit = TextField('bundleUnit')
+  displayPrice = TextField('displayPrice')
+  displayQty = TextField('displayQty')
+
+  def __init__(self, *args, **kwargs):
+    Form.__init__(self, *args, **kwargs)
+  
 class AddStock(Form):
   barcode = SelectField('barcode', choices=[])
   serialNumber = TextField('serialNumber', validators = [validators.Required()])

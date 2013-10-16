@@ -1,0 +1,39 @@
+{% extends "baselayout.html" %}
+ 
+{% block content %}
+
+<h3> Update Shop Information </h3>
+<form action = "" method = post>
+<table class="table">
+<thead>
+	<tr>
+		<th> Barcode </th>
+		<th> Name </th>
+		<th> ManufacturerID </th>
+		<th> Category </th>
+		<th> Price </th>
+		<th> Minimum Stock </th>
+		<th> Current Stock </th>
+		<th> Bundle Unit </th>
+		<th> Display price </th>
+		<th> Display Quantity </th>
+	</tr>
+</thead>
+<tbody>
+<tr>
+	<td>{{ updateproductinfo.barcode }} </td>
+	<td>{{ updateproductinfo.proname }}  </td>
+	<td>{{ updateproductinfo.manufacturerId }}</td>
+	<td>{{ updateproductinfo.category }} </td>
+	<td>{{ updateproductinfo.price }} </td>
+	<td>{{ updateproductinfo.minStock }} </td>
+	<td>{{ updateproductinfo.currentStock }} </td>
+	<td>{{ updateproductinfo.bundleUnit }}  </td>
+	<td>{{ updateproductinfo.displayPrice }}</td>
+	<td>{{ updateproductinfo.displayQty }} </td>
+</tr>
+</tbody>
+</table>
+<input type="submit" value="Update Product">
+</form>
+{% endblock %}
