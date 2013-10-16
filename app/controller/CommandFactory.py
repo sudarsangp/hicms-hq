@@ -15,7 +15,7 @@ from LocationOperations import AddLocation, ViewLocation
 from StockOperations import AddStock
 from ManufacturerOperations import AddManufacturer,ViewManufacturers
 from CategoryOperations import AddCategory,ViewCategories
-from ProductOperations import AddProduct, ViewProduct, SearchProductBarcode, RetrieveProduct, UpdateProduct
+from ProductOperations import AddProduct, ViewProduct, SearchProductBarcode, RetrieveProduct, UpdateProduct, DeleteProduct
 from UserOperations import BuyItem
 
 class CommandFactory(object):
@@ -57,6 +57,10 @@ class CommandFactory(object):
             updateProductCommand = UpdateProduct()
             return updateProductCommand
 
+        elif operation == "deleteproduct":
+            deleteProductCommand = DeleteProduct()
+            return deleteProductCommand
+        
         elif operation == "addlocation":
         	addLocationCommand = AddLocation()
         	return addLocationCommand

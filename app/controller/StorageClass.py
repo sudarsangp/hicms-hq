@@ -193,3 +193,8 @@ class StorageClass(object):
         updateproduct.displayPrice = formData.displayPrice.data
         updateproduct.displayQty = formData.displayQty.data
         db.session.commit()
+
+    def delete_product_info(self, enteredBarcode):
+        producttodelete = Products.query.filter_by(barcode = enteredBarcode).first()
+        db.session.delete(producttodelete)
+        db.session.commit()

@@ -106,6 +106,9 @@ def hq_functions():
     elif operation == "updateproduct":
       return redirect(url_for('update_product', operation = operation))
 
+    elif operation == "deleteproduct":
+      return redirect(url_for('delete_product', operation = operation))
+
     elif operation == "viewproducts":
       return redirect(url_for('view_all_products',operation = operation))
 
@@ -116,6 +119,17 @@ def hq_functions():
       return "Mapping not yet implemented"
   elif request.method == "GET":
     return render_template('HQshop_related_operation.html', form = form)
+
+@app.route('/deleteproduct/<operation>', methods = ['POST', 'GET'])
+def delete_product(operation):
+  form = SearchBarcode()
+  if request.method == "POST":
+    logicObject = Logic.Logic()
+    feedback = logicObject.execute(operation, form)
+    return render_template('feedback.html', feedback = feedback)
+
+  elif request.method == 'GET':
+    return render_template('searchbarcode.html',form = form)
 
 @app.route('/updateproduct/<operation>', methods = ['POST', 'GET'])
 def update_product(operation):
