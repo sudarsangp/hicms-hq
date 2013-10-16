@@ -96,20 +96,28 @@ def hq_functions():
 
     elif operation == "viewshops":
       return redirect(url_for('view_all_shops', operation = operation))
-
-    elif operation == "addlocation":
-      return redirect(url_for('enterlocation', operation = operation))   
      
     elif operation == "addproduct":
       return redirect(url_for('addproduct',operation = operation))  
 
+    elif operation == "retrieveproduct":
+      return redirect(url_for('retrieve_product', operation = operation))
+
     elif operation == "viewproducts":
       return redirect(url_for('view_all_products',operation = operation))
+
+    elif operation == "addlocation":
+      return redirect(url_for('enterlocation', operation = operation))   
 
     else:
       return "Mapping not yet implemented"
   elif request.method == "GET":
     return render_template('HQshop_related_operation.html', form = form)
+
+@app.route('/retrieveproduct/<operation>', methods = ['POST', 'GET'])
+def retrieve_product(operation):
+  return redirect(url_for('search_barcode', operation = operation))
+
 
 @app.route('/deleteshop/<operation>', methods = ['POST', 'GET'])
 def delete_shop(operation):

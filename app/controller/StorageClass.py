@@ -123,7 +123,7 @@ class StorageClass(object):
     
     def check_if_Product_exists(self,formData):
         product_id = Products.query.filter_by( barcode = formData.barcode.data).first()
-        
+        #logic is inverted here
         if product_id:
             return False
         else:

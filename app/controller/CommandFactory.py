@@ -15,7 +15,7 @@ from LocationOperations import AddLocation, ViewLocation
 from StockOperations import AddStock
 from ManufacturerOperations import AddManufacturer,ViewManufacturers
 from CategoryOperations import AddCategory,ViewCategories
-from ProductOperations import AddProduct, ViewProduct, SearchProductBarcode
+from ProductOperations import AddProduct, ViewProduct, SearchProductBarcode, RetrieveProduct
 from UserOperations import BuyItem
 
 class CommandFactory(object):
@@ -30,8 +30,8 @@ class CommandFactory(object):
         	return addShopCommand
 
         elif operation == "retrieveshop":
-            retriveShopCommand = RetrieveShop()
-            return retriveShopCommand
+            retrieveShopCommand = RetrieveShop()
+            return retrieveShopCommand
 
         elif operation == "updateshop":
             updateShopCommand = UpdateShop()
@@ -44,6 +44,14 @@ class CommandFactory(object):
         elif operation == "viewshops":
             viewShopCommand = ViewShops()
             return viewShopCommand
+
+        elif operation == "addproduct":
+            addProductCommand = AddProduct()
+            return addProductCommand
+
+        elif operation == "retrieveproduct":
+            retrieveProductCommand = RetrieveProduct()
+            return retrieveProductCommand
 
         elif operation == "addlocation":
         	addLocationCommand = AddLocation()
@@ -64,11 +72,7 @@ class CommandFactory(object):
         elif operation == "addcategory":
             addCategoryCommand = AddCategory()
             return addCategoryCommand
-        
-        elif operation == "addproduct":
-            addProductCommand = AddProduct()
-            return addProductCommand
-        
+                        
         elif operation == "viewmanufacturers":
             viewManufacturersCommand = ViewManufacturers()
             return viewManufacturersCommand

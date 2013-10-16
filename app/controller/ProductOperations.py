@@ -72,3 +72,13 @@ class SearchProductBarcode(Command):
 
     def get_product_for_barcode(self, formData):
         return self.storageObject.get_product_for_barcode(formData.barcode.data)
+
+class RetrieveProduct(Command):
+    def __init__(self):
+        self.storageObject = StorageClass()
+
+    def execute(self, formData):
+        return self.get_product_barcode_db(formData)
+
+    def get_product_barcode_db(self, formData):
+        return self.storageObject.get_product_for_barcode(formData.barcode.data)

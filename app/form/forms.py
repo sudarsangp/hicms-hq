@@ -58,11 +58,10 @@ class ShopAdminFunction(Form):
 
 class HQAdminFunction(Form):
   operations = RadioField('operations', choices = [('addshop','Create Shop'),('retrieveshop', 'Retrieve Shop'),('updateshop','Update Shop'),('deleteshop','Delete Shop'),('viewshops','List All Shops'),
-    ('addlocation','Add Location'),('addproduct','Add Product'),
-    ('addcategory','Add Category'),('addmanufacturer','Add Manufacturer'),('addcustomer','Add Customer'),('addstock', 'Add Stock'),
-    ('viewproducts','View All Products'),
-    ('editproduct','Edit Product'),('editcustomer','Edit Customer'),
-    ('removeproduct','Remove Product'),('removecustomer','Remove Customer')])
+    ('addproduct','Add Product'),('retrieveproduct','Retrieve Product'),('updateproduct', 'Update Product'),('deleteproduct', 'Delete Product'),('viewproducts','View All Products'),
+    ('addlocation','Add Location'),('addcategory','Add Category'),('addmanufacturer','Add Manufacturer'),('addcustomer','Add Customer'),('addstock', 'Add Stock'),
+    ('editcustomer','Edit Customer'),
+    ('removecustomer','Remove Customer')])
 
 class AddCustomer(Form):
   customername = TextField('customername', validators = [validators.Required(), validateNotEmpty])
@@ -108,7 +107,7 @@ class AddProduct(Form):
 	
   def __init__(self, *args, **kwargs):
     Form.__init__(self, *args, **kwargs)  
-  
+
 class AddStock(Form):
   barcode = SelectField('barcode', choices=[])
   serialNumber = TextField('serialNumber', validators = [validators.Required()])

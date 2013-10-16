@@ -2,22 +2,55 @@
 {% block content %}
 
 <form action="" method = "post" >
-
-	<div id="menuone">
+	
+	<div id="menuone"> 
+	
 	<h3> Shop Related </h3>
-	<div>
+	<div> 
 	{% for subfield in form.operations %}
-	  {% if loop.index <= 5 %} 
-    <tr>
+	  {% if loop.index >=1 and loop.index <= 5 %}
+		 <tr>
         <td>{{ subfield }}</td>
         <td>{{ subfield.label }}</td>
 
-    </tr>
-   {% endif %}
-	{% endfor %}
+    	</tr>
+      {% elif loop.index > 5 %}
+      	
+	 {% endif %}
+  	{% endfor %}
 	</div>
-	</div> 
-	
+
+	<h3> Product Related </h3>
+	<div> 
+	{% for subfield in form.operations %}
+	  {% if loop.index >=6 and loop.index <= 10 %}
+		 <tr>
+        <td>{{ subfield }}</td>
+        <td>{{ subfield.label }}</td>
+
+    	</tr>
+      {% elif loop.index >10 %}
+      	
+	 {% endif %}
+  	{% endfor %}
+	</div>
+
+	<h3> Other Currently </h3>
+	<div> 
+	{% for subfield in form.operations %}
+	  {% if loop.index >10 %}
+		 <tr>
+        <td>{{ subfield }}</td>
+        <td>{{ subfield.label }}</td>
+
+    	</tr>
+      {% else %}
+      	
+	 {% endif %}
+  	{% endfor %}
+	</div>
+
+	</div>	
 	<br> 
 	<div class="form-group">
 	<input type = "submit" value="Submit" class="btn"></p>
