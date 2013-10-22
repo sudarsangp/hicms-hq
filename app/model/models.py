@@ -56,23 +56,35 @@ class Location(db.Model):
     self.tax = tax
     self.distance = distance
 
-
-
-
 class Stock(db.Model):
 
   __tablename__ = "Stock"
 
   barcode = db.Column(db.String(256), primary_key = True)
-  serialNumber = db.Column(db.String(256), primary_key = True)
-  batchQty = db.Column(db.Integer)
-  isOnDisplay = db.Column(db.Boolean,nullable = False)
-
-  def __init__(self, barcode, serialNumber, batchQty, isOnDisplay):
+  shopId = db.Column(db.String(256))
+  stockQty = db.Column(db.Integer)
+  
+  def __init__(self, barcode, shopId, stockQty):
     self.barcode = barcode
-    self.serialNumber = serialNumber
-    self.batchQty = batchQty
-    self.isOnDisplay = isOnDisplay
+    self.shopId = shopId
+    self.stockQty = stockQty
+
+class SoldStock(db.Model):
+
+  __tablename__ = "SoldStock"
+
+  barcode = db.Column(db.String(256), primary_key = True)
+  priceSold = db.Column(db.Float,nullable = False)
+  unitSold = db.Column(db.Integer,nullable = False)
+  shopId = db.Column(db.String(256))
+  timeStamp = db.Column(db.TIMESTAMP)
+
+  def __init__(self, barcode, priceSold, unitSold, shopId, timeStamp):
+    self.barcode = barcode
+    self.priceSold = priceSold
+    self.unitSold = unitSold
+    self.shopId = shopId
+    self.timeStamp = timeStamp
 
 class Category(db.Model):
     __tablename__ = "Category"
@@ -109,24 +121,19 @@ class Products(db.Model):
     category = db.Column(db.String(256),nullable = False)
     price = db.Column(db.Float,nullable = False)
     minStock = db.Column(db.Integer,nullable = False)
-    currentStock = db.Column(db.Integer,nullable = False)
+    cacheStockQty = db.Column(db.Integer,nullable = False)
     bundleUnit = db.Column(db.Integer,nullable = False)
-    displayPrice = db.Column(db.Float,nullable = False)
-    displayQty = db.Column(db.Integer,nullable = False)
-
-    def __init__(self,barcode,name,manufacturerId,category,price,minStock,currentStock,bundleUnit,displayPrice,displayQty):
+    
+    def __init__(self,barcode,name,manufacturerId,category,price,minStock,cacheStockQty,bundleUnit):
        self.barcode = barcode 
        self.name = name
        self.manufacturerId = manufacturerId
        self.category = category
        self.price = price
        self.minStock = minStock
-       self.currentStock = currentStock
+       self.cacheStockQty = cacheStockQty
        self.bundleUnit = bundleUnit
-       self.displayPrice = displayPrice
-       self.displayQty = displayQty
        
-""" nets tuts tutorial flask login """
 class User(db.Model):
   __tablename__ = 'users'
   uid = db.Column(db.Integer, primary_key = True)
@@ -146,24 +153,6 @@ class User(db.Model):
    
   def check_password(self, password):
     return check_password_hash(self.pwdhash, password)
-
-""" this one from flask documentation """
-#class User(db.Model):
-#	id = db.Column(db.Integer, primary_key = True)
-#	name = db.Column(db.String(64), index = True, unique = True)
-#	
-#	def is_authenticated(self):
-#		return True
-#
-#	def is_active(self):
-#		return True
-#
-#	def is_anonymous(self):
-#		return False
-#
-#	def get_id(self):
-#		return unicode(self.id)
-
 
 """ to ensure whetehr database connection works """
 class Check(db.Model):

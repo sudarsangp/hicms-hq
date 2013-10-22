@@ -58,7 +58,8 @@ class ShopAdminFunction(Form):
 
 class HQAdminFunction(Form):
   operations = RadioField('operations', choices = [('addshop','Create Shop'),('retrieveshop', 'Retrieve Shop'),('updateshop','Update Shop'),('deleteshop','Delete Shop'),('viewshops','List All Shops'),
-    ('addproduct','Add Product'),('retrieveproduct','Retrieve Product'),('updateproduct', 'Update Product'),('deleteproduct', 'Delete Product'),('viewproducts','View All Products'),
+    ('addproduct','Add Product'),('retrieveproduct','Retrieve Product'),('updateproduct', 'Update Product'),('deleteproduct', 'Delete Product'),('viewproducts','View All Products'),('downloadinventory','Download Inventory'),('activepricing','Active Pricing'),
+    ('listoveralltransaction','List All Transaction'),('transactiongroupedbyshop','Grouped by Shop'),
     ('addlocation','Add Location'),('addcategory','Add Category'),('addmanufacturer','Add Manufacturer'),('addcustomer','Add Customer'),('addstock', 'Add Stock'),
     ('editcustomer','Edit Customer'),
     ('removecustomer','Remove Customer')])
@@ -95,15 +96,12 @@ class AddProduct(Form):
   proname = TextField('name',validators = [validators.Required(), validateNotEmpty])
   manufacturerId = SelectField('manufacturerId',choices=[])
   manufacturerForm = FormField(AddManufacturer)
-#  manufacturerId = TextField('manufacturerId',validators = [validators.Required()])
   category = SelectField('category',choices=[])
   categoryForm = FormField(AddCategory)
   price = TextField('price',validators = [validators.Required(), validateNotEmpty, validateNumber])
   minStock = TextField('minStock',validators = [validators.Required(), validateNotEmpty, validateNumber])
-  currentStock = TextField('currentStock',validators = [validators.Required(), validateNotEmpty, validateNumber])
+  cacheStockQty = TextField('cacheStockQty',validators = [validators.Required(), validateNotEmpty, validateNumber])
   bundleUnit = TextField('bundleUnit',validators = [validators.Required(), validateNumber, validateNotEmpty])
-  displayPrice = TextField('displayPrice',validators = [validators.Required(), validateNumber, validateNotEmpty])
-  displayQty = TextField('displayQty',validators = [validators.Required(), validateNumber, validateNotEmpty])
 	
   def __init__(self, *args, **kwargs):
     Form.__init__(self, *args, **kwargs)  
@@ -115,19 +113,16 @@ class UpdateProductForm(Form):
   category = TextField('category')
   price = TextField('price')
   minStock = TextField('minStock')
-  currentStock = TextField('currentStock')
+  cacheStockQty = TextField('cacheStockQty')
   bundleUnit = TextField('bundleUnit')
-  displayPrice = TextField('displayPrice')
-  displayQty = TextField('displayQty')
 
   def __init__(self, *args, **kwargs):
     Form.__init__(self, *args, **kwargs)
   
 class AddStock(Form):
   barcode = SelectField('barcode', choices=[])
-  serialNumber = TextField('serialNumber', validators = [validators.Required()])
   batchQty = TextField('batchQty', validators = [validators.Required()])
-  isOnDisplay = BooleanField('isOnDisplay')
+  shopId = TextField('shopId')
 
   def __init__(self, *args, **kwargs):
     Form.__init__(self, *args, **kwargs)

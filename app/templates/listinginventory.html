@@ -2,7 +2,6 @@
  
 {% block content %}
 
-<h3> All Products Information </h3>
 <table class="table">
 <thead>
 	<tr>
@@ -12,10 +11,8 @@
 		<th> Category </th>
 		<th> Price </th>
 		<th> Minimum Stock </th>
-		<th> Current Stock </th>
+		<th> Cache Stock Quantity </th>
 		<th> Bundle Unit </th>
-		<th> Display price </th>
-		<th> Display Quantity </th>
 	</tr>
 </thead>
 <tbody>
@@ -27,10 +24,8 @@
 <td>{{ productobj.category }} </td>
 <td>{{ productobj.price }} </td>
 <td>{{ productobj.minStock }} </td>
-<td>{{ productobj.currentStock }} </td>
+<td>{{ productobj.cacheStockQty }} </td>
 <td>{{ productobj.bundleUnit }} </td>
-<td>{{ productobj.displayPrice }} </td>
-<td>{{ productobj.displayQty }} </td>
 </tr>
 {% endfor %}
 </tbody>

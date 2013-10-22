@@ -116,7 +116,7 @@ class StorageClass(object):
     
     def addProductToDatabase(self,formData):
         newProductData = Products(formData.barcode.data,formData.proname.data,formData.manufacturerId.data,formData.category.data,formData.price.data,
-                                  formData.minStock.data,formData.currentStock.data,formData.bundleUnit.data,formData.displayPrice.data,formData.displayQty.data)
+                                  formData.minStock.data,formData.cacheStockQty.data,formData.bundleUnit.data)
 
         db.session.add(newProductData) 
         db.session.commit()  
@@ -188,10 +188,8 @@ class StorageClass(object):
         updateproduct = Products.query.filter_by(barcode = formData.barcode.data).first()
         updateproduct.price = formData.price.data
         updateproduct.minStock = formData.minStock.data
-        updateproduct.currentStock = formData.currentStock.data
+        updateproduct.cacheStockQty = formData.cacheStockQty.data
         updateproduct.bundleUnit = formData.bundleUnit.data
-        updateproduct.displayPrice = formData.displayPrice.data
-        updateproduct.displayQty = formData.displayQty.data
         db.session.commit()
 
     def delete_product_info(self, enteredBarcode):

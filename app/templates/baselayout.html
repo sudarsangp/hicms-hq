@@ -36,16 +36,8 @@
             <div class = "collapse navbar-collapse navbar-ex1-collapse">
               <ul class="nav navbar-nav navbar-left">
                 {% if 'email' in session %}
-               <!--  <li {%- if request.endpoint == endpoint -%} class="active" {%- endif -%} >
-                  <a class= "navbar-brand" href="{{ url_for('product_functions') }}" >Operations</a>
-                </li>
-                <li {%- if url == url_root -%} class="active" {%- endif -%}>
-                  <a class= "navbar-brand" href="{{ url_for('profile') }}">Profile</a>
-                </li>
-                <li {%- if endpoint == request.signout -%} class="active" {%- endif -%}>
-                  <a class= "navbar-brand" href="{{ url_for('signout') }}">Sign Out</a>
-                </li> -->
-                {{render_sitem('product_functions',  ('Operations'), icon_cls='', active=active_page)}}
+              
+                {{render_sitem('hq_functions',  ('HQ Operations'), icon_cls='', active=active_page)}}
                 {{render_sitem('profile', ('Profile'), icon_cls='', active=active_page)}}
                 </ul>
               
@@ -56,12 +48,7 @@
               {% else %}
               
                 <ul class="nav navbar-nav navbar-right">
-                  <!-- <li {% if endpoint == request.signup %} class="active" {% endif%}>
-                    <a href="{{ url_for('signup') }}">Sign Up</a>
-                  </li>
-                  <li {% if endpoint == request.signin %} class="active" {% endif%}>
-                    <a href="{{ url_for('signin') }}">Sign In</a>
-                  </li> -->
+              
                   {{render_sitem('signup', ('Sign Up'), icon_cls='', active=active_page, align=right)}}
                   {{render_sitem('signin', ('Sign In'), icon_cls='', active=active_page, align=right)}}
                 </ul>

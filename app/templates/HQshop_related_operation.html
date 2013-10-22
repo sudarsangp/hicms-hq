@@ -20,10 +20,10 @@
   	{% endfor %}
 	</div>
 
-	<h3> Product Related </h3>
+	<h3> Inventory Related </h3>
 	<div> 
 	{% for subfield in form.operations %}
-	  {% if loop.index >=6 and loop.index <= 10 %}
+	  {% if loop.index >=6 and loop.index <= 12 %}
 		 <tr>
         <td>{{ subfield }}</td>
         <td>{{ subfield.label }}</td>
@@ -35,10 +35,25 @@
   	{% endfor %}
 	</div>
 
+	<h3> Transaction Related </h3>
+	<div> 
+	{% for subfield in form.operations %}
+	  {% if loop.index >=13 and loop.index <= 14 %}
+		 <tr>
+        <td>{{ subfield }}</td>
+        <td>{{ subfield.label }}</td>
+
+    	</tr>
+      {% else %}
+      	
+	 {% endif %}
+  	{% endfor %}
+	</div>
+
 	<h3> Other Currently </h3>
 	<div> 
 	{% for subfield in form.operations %}
-	  {% if loop.index >10 %}
+	  {% if loop.index >14 %}
 		 <tr>
         <td>{{ subfield }}</td>
         <td>{{ subfield.label }}</td>
