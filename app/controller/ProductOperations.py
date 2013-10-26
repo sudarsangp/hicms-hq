@@ -39,7 +39,7 @@ class AddProduct(Command):
          else:
                  #populate feedback with cannot be added data
                  self.feedbackObject.setinfo("Failed :Duplicate present Data cannot be added")
-                 self.feedbackObject.setdata(formData.name.data)
+                 self.feedbackObject.setdata(formData.proname.data)
                  self.feedbackObject.setcommandtype("AddProduct") 
          
          return self.feedbackObject

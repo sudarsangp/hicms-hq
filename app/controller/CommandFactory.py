@@ -17,6 +17,7 @@ from ManufacturerOperations import AddManufacturer,ViewManufacturers
 from CategoryOperations import AddCategory,ViewCategories
 from ProductOperations import AddProduct, ViewProduct, SearchProductBarcode, RetrieveProduct, UpdateProduct, DeleteProduct
 from UserOperations import BuyItem
+from CommunicateWithShop import UpdateShopServer
 
 class CommandFactory(object):
     
@@ -100,4 +101,8 @@ class CommandFactory(object):
         elif operation == "searchBarcode":
             searchBarcodeCommand = SearchProductBarcode()
             return searchBarcodeCommand
+
+        elif operation == "sendinventory":
+            sendInventoryCommand = UpdateShopServer()
+            return sendInventoryCommand
      

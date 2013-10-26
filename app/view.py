@@ -1,4 +1,4 @@
-from flask import render_template, flash, request, session, redirect, url_for
+from flask import render_template, flash, request, session, redirect, url_for, jsonify
 from flask.ext.login import login_required
 from app import app, login_manager
 
@@ -7,6 +7,9 @@ from form.forms import SearchBarcode, LocationShopForm, HQAdminFunction, Retriev
 
 from model.models import Check, User, db, Customer
 from controller import Logic
+
+import requests, json
+fname = 'newitems.txt'
 
 @app.route('/check')
 def default():
@@ -48,7 +51,7 @@ def signin():
       return render_template('signin.html', form=form)
     else:
       session['email'] = form.email.data
-      return redirect(url_for('product_functions'))
+      return redirect(url_for('hq_functions'))
                  
   elif request.method == 'GET':
     return render_template('signin.html', form=form) 
@@ -115,10 +118,20 @@ def hq_functions():
     elif operation == "addlocation":
       return redirect(url_for('enterlocation', operation = operation))   
 
+    elif operation == "sendinventory":
+      return redirect(url_for('send_inventory', operation = operation))
+
     else:
+      print operation
       return "Mapping not yet implemented"
   elif request.method == "GET":
     return render_template('HQshop_related_operation.html', form = form)
+
+@app.route('/sendinventory/<operation>', methods = ['POST','GET'])
+def send_inventory(operation):
+  logicObject = Logic.Logic()
+  feedback = logicObject.execute(operation,None)
+  return render_template('feedback.html', feedback = feedback)
 
 @app.route('/deleteproduct/<operation>', methods = ['POST', 'GET'])
 def delete_product(operation):
@@ -161,10 +174,8 @@ def actual_updateproduct(formbarcode):
       updateproductinfo.category = retrieveproductinfo.category
       updateproductinfo.price.data = retrieveproductinfo.price
       updateproductinfo.minStock.data = retrieveproductinfo.minStock
-      updateproductinfo.currentStock.data = retrieveproductinfo.currentStock
+      updateproductinfo.cacheStockQty.data = retrieveproductinfo.cacheStockQty
       updateproductinfo.bundleUnit.data = retrieveproductinfo.bundleUnit
-      updateproductinfo.displayPrice.data = retrieveproductinfo.displayPrice
-      updateproductinfo.displayQty.data = retrieveproductinfo.displayQty
       
       return render_template('updateproductforbarcode.html', updateproductinfo = updateproductinfo)
 
@@ -280,22 +291,6 @@ def addshop(operation):
   elif request.method == "GET":    
     return render_template('registershop.html',form = form)
 
-#shop admin actual functions
-@app.route('/saoperation', methods = ['POST','GET'])
-def sa_operation():
-  form = ShopAdminFunction()
-  if request.method == "POST":
-    operation = form.operations.data
-
-    if operation == "searchBarcode":
-      return redirect(url_for('search_barcode',operation = operation))
-
-    elif operation == "viewproducts":
-      return redirect(url_for('view_all_products', operation = operation))
-
-  elif request.method == 'GET':
-    return render_template('SAproduct_operation.html', form = form)
-
 @app.route('/productsearch/<operation>', methods = ['POST','GET'])
 def search_barcode(operation):
   form = SearchBarcode()
@@ -315,36 +310,6 @@ def view_all_products(operation):
   logicObject = Logic.Logic()
   allproducts = logicObject.execute(operation, None)
   return render_template('listinginventory.html', allproducts = allproducts)
-
-#for manually adding product to the database or shop
-@app.route('/product', methods = ['POST', 'GET'])
-#@login_required
-def product_functions():
-  form = ShopAdminFunction()
-  if request.method ==  "POST":
-    
-    operation = form.operations.data
-    
-    if operation == "addcustomer":
-      return redirect(url_for('addcustomer',operation = operation))
-    
-    elif operation == "addmanufacturer":
-      return redirect(url_for('addmanufacturer',operation = operation))
-    
-    elif operation == "addstock":
-      return redirect(url_for('addstock',operation = operation)) 
-
-    elif operation == "addcategory":
-      return redirect(url_for('addcategory',operation = operation))	
-    
-    elif operation == "addproduct":
-      return redirect(url_for('addproduct',operation = operation))
-    	
-    else:
-      return redirect(url_for('defaulterror')) 
-
-  elif request.method == 'GET':
-    return render_template('SAproduct_operation.html',form=form)
 
 @app.route('/customer/<operation>', methods = ['POST', 'GET'])
 #@login_required
@@ -466,4 +431,33 @@ def db_check():
 	checkdb = Check()
 	return checkdb.check_id()
 
-  
+
+#to check server information
+@app.route('/serverinfo', methods = ['POST']) 
+def server_info():
+  stock_soldstock = request.data
+  stock_soldstock_dict = json.loads(stock_soldstock)
+  stock_info = {}
+  soldstock_info = {}
+  for tablename in stock_soldstock_dict:
+    if tablename == "soldstock":
+      soldstock_info = stock_soldstock_dict[tablename]
+    elif tablename == "stock":
+      stock_info = stock_soldstock_dict[tablename]
+
+  print "stock"
+  for colname in stock_info:
+    print colname, stock_info[colname]
+
+  print "soldstock"
+  for colname in soldstock_info:
+    print colname, soldstock_info[colname]
+  #print stock_info
+  #print soldstock_info
+  return stock_soldstock
+  #print stock_soldstock
+  #r = requests.get('http://127.0.0.1/serverinfo')
+  #c = r.content
+  #result = simplejson.loads(c)
+  #print r
+  #return jsonify(tasks)

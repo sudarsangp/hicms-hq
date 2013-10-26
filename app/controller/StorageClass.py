@@ -8,6 +8,8 @@
 from app.model.models import db, Customer,Shops, Location, Manufacturers,Category,Products, Stock
 from flask import session
 
+fname = 'newitems.txt'
+
 class StorageClass(object):
     
     def addCustomerTODatabase(self,formData):
@@ -117,10 +119,23 @@ class StorageClass(object):
     def addProductToDatabase(self,formData):
         newProductData = Products(formData.barcode.data,formData.proname.data,formData.manufacturerId.data,formData.category.data,formData.price.data,
                                   formData.minStock.data,formData.cacheStockQty.data,formData.bundleUnit.data)
-
+        f = open(fname,'a')
+        prodall = {}
+        textprod = {}
+        textprod['barcode'] = formData.barcode.data
+        textprod['proname'] = formData.proname.data
+        textprod['manufacturerId'] = formData.manufacturerId.data
+        textprod['category'] = formData.category.data
+        textprod['price'] = formData.price.data
+        textprod['minStock'] = formData.minStock.data
+        textprod['bundleUnit'] = formData.bundleUnit.data
+        prodall['addproducts'] = textprod
         db.session.add(newProductData) 
-        db.session.commit()  
-    
+        db.session.commit()
+        f.write(";")
+        f.write(str(prodall))
+        f.close()
+
     def check_if_Product_exists(self,formData):
         product_id = Products.query.filter_by( barcode = formData.barcode.data).first()
         #logic is inverted here
@@ -191,6 +206,17 @@ class StorageClass(object):
         updateproduct.cacheStockQty = formData.cacheStockQty.data
         updateproduct.bundleUnit = formData.bundleUnit.data
         db.session.commit()
+        
+        f = open(fname,'a')
+        prodall = {}
+        textprod = {}
+        textprod['price'] = formData.price.data
+        textprod['minStock'] = formData.minStock.data
+        textprod['bundleUnit'] = formData.bundleUnit.data
+        prodall['editproducts'] = textprod
+        f.write(";")
+        f.write(str(prodall))
+        f.close()
 
     def delete_product_info(self, enteredBarcode):
         producttodelete = Products.query.filter_by(barcode = enteredBarcode).first()

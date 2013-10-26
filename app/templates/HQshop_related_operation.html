@@ -50,10 +50,25 @@
   	{% endfor %}
 	</div>
 
+	<h3> Communicate With Shop </h3>
+	<div> 
+	{% for subfield in form.operations %}
+	  {% if loop.index ==15 %}
+		 <tr>
+        <td>{{ subfield }}</td>
+        <td>{{ subfield.label }}</td>
+
+    	</tr>
+      {% else %}
+      	
+	 {% endif %}
+  	{% endfor %}
+	</div>
+
 	<h3> Other Currently </h3>
 	<div> 
 	{% for subfield in form.operations %}
-	  {% if loop.index >14 %}
+	  {% if loop.index >15 %}
 		 <tr>
         <td>{{ subfield }}</td>
         <td>{{ subfield.label }}</td>
