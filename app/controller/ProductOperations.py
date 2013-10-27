@@ -111,10 +111,15 @@ class DeleteProduct(Command):
         inverted = self.storageObject.check_if_Product_exists(formData)
         actual = not inverted
         if actual:
-            self.storageObject.delete_product_info(formData.barcode.data)
-            self.feedbackObject.setinfo("Success: data deleted ")
-            self.feedbackObject.setdata(formData.barcode.data)
-            self.feedbackObject.setcommandtype("Delete Shop")
+            check = self.storageObject.delete_product_info(formData.barcode.data)
+            if check:
+                self.feedbackObject.setinfo("Success: data deleted ")
+                self.feedbackObject.setdata(formData.barcode.data)
+                self.feedbackObject.setcommandtype("Delete Shop")
+            else:
+                self.feedbackObject.setinfo("Failed: Stock Quantity non zero in shop ")
+                self.feedbackObject.setdata(formData.barcode.data)
+                self.feedbackObject.setcommandtype("Delete Shop")
         else:
             self.feedbackObject.setinfo("Failed: barcode not found ")
             self.feedbackObject.setdata("barcode not found")

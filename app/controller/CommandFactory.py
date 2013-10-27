@@ -18,7 +18,7 @@ from CategoryOperations import AddCategory,ViewCategories
 from ProductOperations import AddProduct, ViewProduct, SearchProductBarcode, RetrieveProduct, UpdateProduct, DeleteProduct
 from UserOperations import BuyItem
 from CommunicateWithShop import UpdateShopServer
-from SoldStockOperations import AddSoldStock
+from SoldStockOperations import AddSoldStock, ViewSoldStock, SearchSoldStockByShopId
 
 class CommandFactory(object):
     
@@ -110,4 +110,12 @@ class CommandFactory(object):
         elif operation == "addsoldstock":
             addSoldStockCommand = AddSoldStock()
             return addSoldStockCommand
+
+        elif operation == "viewtransactions":
+            viewTransactionCommand = ViewSoldStock()
+            return viewTransactionCommand
+
+        elif operation == "transactiongroupedbyshop":
+            transactionByShopCommand = SearchSoldStockByShopId()
+            return transactionByShopCommand
      

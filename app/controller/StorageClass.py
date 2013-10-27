@@ -229,6 +229,29 @@ class StorageClass(object):
         f.close()
 
     def delete_product_info(self, enteredBarcode):
+        allstockforbarcode = Stock.query.filter_by(barcode = enteredBarcode).all()
+        for i in range(len(allstockforbarcode)):
+            if allstockforbarcode[i].stockQty > 0:
+                return False
         producttodelete = Products.query.filter_by(barcode = enteredBarcode).first()
         db.session.delete(producttodelete)
         db.session.commit()
+
+        f = open(fname,'a')
+        prodall = {}
+        textprod = {}
+        textprod['barcode'] = enteredBarcode
+        prodall['deleteproducts'] = textprod
+        f.write(";")
+        f.write(str(prodall))
+        f.close()
+
+        return True
+
+    def get_soldstock_from_db(self):
+        existingSoldStocks = SoldStock.query.all()
+        return existingSoldStocks
+
+    def get_transaction_grouped_shopId(self, enteredShopId):
+        transactionsbyshopid = SoldStock.query.filter_by(shopId = enteredShopId).all()
+        return transactionsbyshopid

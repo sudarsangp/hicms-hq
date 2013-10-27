@@ -1,0 +1,27 @@
+{% extends "baselayout.html" %}
+ 
+{% block content %}
+
+<table class="table">
+<thead>
+	<tr>
+		<th> Barcode </th>
+		<th> Price Sold </th>
+		<th> Unit Sold </th>
+		<th> ShopId </th>
+		<th> TimeStamp </th>
+	</tr>
+</thead>
+<tbody>
+{% for transactionobj in transactionobjbyshop %}
+<tr>
+<td>{{ transactionobj.barcode }} </td>
+<td>{{ transactionobj.priceSold }}  </td>
+<td>{{ transactionobj.unitSold }}</td>
+<td>{{ transactionobj.shopId }} </td>
+<td>{{ transactionobj.timeStamp }} </td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}

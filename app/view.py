@@ -3,7 +3,7 @@ from flask.ext.login import login_required
 from app import app, login_manager
 
 from form.forms import RegisterShopForm, SignupForm, SigninForm, ShopAdminFunction, AddCustomer ,AddManufacturer , AddStock, AddCategory, AddProduct, BuyItem
-from form.forms import SearchBarcode, LocationShopForm, HQAdminFunction, RetrieveShop, UpdateShopForm, UpdateProductForm, StockForm, SoldStockForm
+from form.forms import SearchBarcode, LocationShopForm, HQAdminFunction, RetrieveShop, UpdateShopForm, UpdateProductForm, StockForm, SoldStockForm, SearchShopId
 
 from model.models import Check, User, db, Customer
 from controller import Logic
@@ -14,7 +14,6 @@ from ast import literal_eval
 @app.route('/check')
 def default():
   return render_template("baselayout.html")
-
 
 
 #############################################################################################
@@ -121,11 +120,33 @@ def hq_functions():
     elif operation == "sendinventory":
       return redirect(url_for('send_inventory', operation = operation))
 
+    elif operation == "viewtransactions":
+      return redirect(url_for('view_all_transaction', operation = operation))
+
+    elif operation == "transactiongroupedbyshop":
+      return redirect(url_for('transaction_grouped_by_shop', operation = operation))
     else:
       print operation
       return "Mapping not yet implemented"
   elif request.method == "GET":
     return render_template('HQshop_related_operation.html', form = form)
+
+@app.route('/transactiongroupedbyshop/<operation>', methods = ['GET', 'POST'])
+def transaction_grouped_by_shop(operation):
+  form = SearchShopId()
+  if request.method == "POST":
+    logicObject = Logic.Logic()
+    transactionobjbyshop = logicObject.execute(operation,form)
+    return render_template('transactionbyshopid.html', transactionobjbyshop = transactionobjbyshop)
+
+  elif request.method == 'GET':
+    return render_template('searchshopid.html',form = form)
+
+@app.route('/transactiondisplayall/<operation>')
+def view_all_transaction(operation):
+  logicObject = Logic.Logic()
+  alltransactions = logicObject.execute(operation, None)
+  return render_template('listingtransactions.html', alltransactions = alltransactions)
 
 @app.route('/sendinventory/<operation>', methods = ['POST','GET'])
 def send_inventory(operation):
