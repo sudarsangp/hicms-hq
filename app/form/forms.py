@@ -58,7 +58,7 @@ class ShopAdminFunction(Form):
 
 class HQAdminFunction(Form):
   operations = RadioField('operations', choices = [('addshop','Create Shop'),('retrieveshop', 'Retrieve Shop'),('updateshop','Update Shop'),('deleteshop','Delete Shop'),('viewshops','List All Shops'),
-    ('addproduct','Add Product'),('retrieveproduct','Retrieve Product'),('updateproduct', 'Update Product'),('deleteproduct', 'Delete Product'),('viewproducts','View All Products'),('downloadinventory','Download Inventory'),('activepricing','Active Pricing'),
+    ('addproduct','Add Product'),('retrieveproduct','Retrieve Product'),('updateproduct', 'Update Product'),('deleteproduct', 'Delete Product'),('viewproducts','View All Products'),('activepricing','Active Pricing'),
     ('listoveralltransaction','List All Transaction'),('transactiongroupedbyshop','Grouped by Shop'),
     ('sendinventory','Send Inventory'),
     ('addlocation','Add Location'),('addcategory','Add Category'),('addmanufacturer','Add Manufacturer'),('addcustomer','Add Customer'),('addstock', 'Add Stock'),
@@ -137,6 +137,24 @@ class BuyItem(Form):
 
 class SearchBarcode(Form):
   barcode = TextField('barcode')
+
+  def __init__(self, *args, **kwargs):
+    Form.__init__(self, *args, **kwargs)
+
+class StockForm(Form):
+  barcode = TextField('barcode')
+  shopId = TextField('shopId')
+  stockQty = TextField('stockQty')
+
+  def __init__(self, *args, **kwargs):
+    Form.__init__(self, *args, **kwargs)
+
+class SoldStockForm(Form):
+  barcode = TextField('barcode')
+  priceSold = TextField('priceSold')
+  unitSold = TextField('unitSold')
+  shopId = TextField('shopId')
+  timeStamp = TextField('timeStamp')
 
   def __init__(self, *args, **kwargs):
     Form.__init__(self, *args, **kwargs)

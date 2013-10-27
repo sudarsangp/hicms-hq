@@ -5,7 +5,7 @@
      
 '''
 
-from app.model.models import db, Customer,Shops, Location, Manufacturers,Category,Products, Stock
+from app.model.models import db, Customer,Shops, Location, Manufacturers,Category,Products, Stock, SoldStock
 from flask import session
 
 fname = 'newitems.txt'
@@ -76,20 +76,29 @@ class StorageClass(object):
         db.session.commit()    
 
     def addStockToDatabase(self, formData):
-        newStockData = Stock(formData.barcode.data, formData.serialNumber.data, formData.batchQty.data, formData.isOnDisplay.data)
-
+        newStockData = Stock(formData.barcode.data, formData.shopId.data, formData.stockQty.data)
         db.session.add(newStockData)
         db.session.commit()
 
     def check_if_stock_exists(self, formData):
-       #if dropdown for serial number then no need to check
-        serialNumber = Stock.query.filter_by(serialNumber = formData.serialNumber.data).first()
-
-        if serialNumber:
-            return False
-        else:
+        barcode = Stock.query.filter_by(barcode = formData.barcode.data).first()
+        if barcode:
             return True
-               
+        else:
+            return False
+
+    def add_sold_stock_to_database(self,formData):
+        newSoldStockData = SoldStock(formData.barcode.data, formData.priceSold.data, formData.unitSold.data, formData.shopId.data, formData.timeStamp.data)
+        db.session.add(newSoldStockData)
+        db.session.commit()
+
+    def check_if_sold_stock_exists(self, formData):
+        barcode = SoldStock.query.filter_by(barcode = formData.barcode.data).first()
+        if barcode:
+            return True
+        else:
+            return False
+
     def add_location_to_database(self, formData):
         newLocationData = Location(formData.city.data, formData.country.data, 
                                     formData.tax.data, formData.distance.data)
@@ -210,6 +219,7 @@ class StorageClass(object):
         f = open(fname,'a')
         prodall = {}
         textprod = {}
+        textprod['barcode'] = formData.barcode.data
         textprod['price'] = formData.price.data
         textprod['minStock'] = formData.minStock.data
         textprod['bundleUnit'] = formData.bundleUnit.data

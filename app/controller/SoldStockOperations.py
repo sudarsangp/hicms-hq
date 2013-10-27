@@ -1,9 +1,8 @@
-
 from Command import Command
 from StorageClass import StorageClass
 from Feedback import Feedback
 
-class AddStock(Command):
+class AddSoldStock(Command):
     
     def __init__(self):
         self.storageObject = StorageClass()
@@ -17,7 +16,7 @@ class AddStock(Command):
             self.feedbackObject.setcommandtype("AddStock")
      
         else:
-            self.storageObject.addStockToDatabase(formData)
+            self.storageObject.add_sold_stock_to_database(formData)
             self.feedbackObject.setinfo("Success: data added ")
             self.feedbackObject.setdata(formData.barcode.data)
             self.feedbackObject.setcommandtype("AddStock")
@@ -25,4 +24,4 @@ class AddStock(Command):
         return self.feedbackObject
 
     def check_existing_item(self, formData):
-        return self.storageObject.check_if_stock_exists(formData) 
+        return self.storageObject.check_if_sold_stock_exists(formData) 

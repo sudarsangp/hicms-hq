@@ -3,13 +3,13 @@ from flask.ext.login import login_required
 from app import app, login_manager
 
 from form.forms import RegisterShopForm, SignupForm, SigninForm, ShopAdminFunction, AddCustomer ,AddManufacturer , AddStock, AddCategory, AddProduct, BuyItem
-from form.forms import SearchBarcode, LocationShopForm, HQAdminFunction, RetrieveShop, UpdateShopForm, UpdateProductForm
+from form.forms import SearchBarcode, LocationShopForm, HQAdminFunction, RetrieveShop, UpdateShopForm, UpdateProductForm, StockForm, SoldStockForm
 
 from model.models import Check, User, db, Customer
 from controller import Logic
 
-import requests, json
-fname = 'newitems.txt'
+import requests, json, time, datetime
+from ast import literal_eval
 
 @app.route('/check')
 def default():
@@ -439,25 +439,28 @@ def server_info():
   stock_soldstock_dict = json.loads(stock_soldstock)
   stock_info = {}
   soldstock_info = {}
-  for tablename in stock_soldstock_dict:
-    if tablename == "soldstock":
-      soldstock_info = stock_soldstock_dict[tablename]
-    elif tablename == "stock":
-      stock_info = stock_soldstock_dict[tablename]
+  stock_list = stock_soldstock_dict['Stock']
+  soldstock_list = stock_soldstock_dict['SoldStock']
 
-  print "stock"
-  for colname in stock_info:
-    print colname, stock_info[colname]
+  stock_form = StockForm()
+  soldstock_form = SoldStockForm()
+  logicObject = Logic.Logic()
+ 
+  for i in range(len(stock_list)):
+    stock_info = literal_eval(json.dumps(stock_list[i]))
+    stock_form.barcode.data = stock_info['Barcode']
+    stock_form.shopId.data = stock_info['ShopId']
+    stock_form.stockQty.data = stock_info['Stock']
+    feedback = logicObject.execute('addstock',stock_form)
 
-  print "soldstock"
-  for colname in soldstock_info:
-    print colname, soldstock_info[colname]
-  #print stock_info
-  #print soldstock_info
-  return stock_soldstock
-  #print stock_soldstock
-  #r = requests.get('http://127.0.0.1/serverinfo')
-  #c = r.content
-  #result = simplejson.loads(c)
-  #print r
-  #return jsonify(tasks)
+  for j in range(len(soldstock_list)):
+    soldstock_info = literal_eval(json.dumps(soldstock_list[j]))
+    soldstock_form.barcode.data = soldstock_info['Barcode']
+    soldstock_form.priceSold.data = soldstock_info['priceSold']
+    soldstock_form.unitSold.data = soldstock_info['unitSold']
+    soldstock_form.shopId.data = soldstock_info['ShopId']
+    soldstock_form.timeStamp.data = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+    feedback = logicObject.execute('addsoldstock',soldstock_form)
+
+  return str(stock_soldstock)
+  
