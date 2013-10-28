@@ -154,7 +154,7 @@ class SoldStockForm(Form):
   priceSold = TextField('priceSold')
   unitSold = TextField('unitSold')
   shopId = TextField('shopId')
-  timeStamp = TextField('timeStamp')
+  timeStamps = TextField('timeStamps')
 
   def __init__(self, *args, **kwargs):
     Form.__init__(self, *args, **kwargs)

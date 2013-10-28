@@ -480,7 +480,7 @@ def server_info():
     soldstock_form.priceSold.data = soldstock_info['priceSold']
     soldstock_form.unitSold.data = soldstock_info['unitSold']
     soldstock_form.shopId.data = soldstock_info['ShopId']
-    soldstock_form.timeStamp.data = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+    soldstock_form.timeStamps.data = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
     feedback = logicObject.execute('addsoldstock',soldstock_form)
 
   return str(stock_soldstock)

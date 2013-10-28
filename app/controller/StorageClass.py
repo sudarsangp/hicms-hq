@@ -88,16 +88,20 @@ class StorageClass(object):
             return False
 
     def add_sold_stock_to_database(self,formData):
-        newSoldStockData = SoldStock(formData.barcode.data, formData.priceSold.data, formData.unitSold.data, formData.shopId.data, formData.timeStamp.data)
+        newSoldStockData = SoldStock(formData.barcode.data, formData.priceSold.data, formData.unitSold.data, formData.shopId.data, formData.timeStamps.data)
         db.session.add(newSoldStockData)
         db.session.commit()
 
     def check_if_sold_stock_exists(self, formData):
+        #counter = SoldStock.query.filter_by(barcode = formData.barcode.data).count()
+        #if counter > 0:
         barcode = SoldStock.query.filter_by(barcode = formData.barcode.data).first()
         if barcode:
             return True
         else:
             return False
+        #else:
+        #   return False
 
     def add_location_to_database(self, formData):
         newLocationData = Location(formData.city.data, formData.country.data, 

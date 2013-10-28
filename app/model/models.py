@@ -77,14 +77,14 @@ class SoldStock(db.Model):
   priceSold = db.Column(db.Float,nullable = False)
   unitSold = db.Column(db.Integer,nullable = False)
   shopId = db.Column(db.String(256))
-  timeStamp = db.Column(db.TIMESTAMP)
+  timeStamps = db.Column(db.TIMESTAMP)
 
   def __init__(self, barcode, priceSold, unitSold, shopId, timeStamp):
     self.barcode = barcode
     self.priceSold = priceSold
     self.unitSold = unitSold
     self.shopId = shopId
-    self.timeStamp = timeStamp
+    self.timeStamps = timeStamp
 
 class Category(db.Model):
     __tablename__ = "Category"
