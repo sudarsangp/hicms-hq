@@ -4,7 +4,9 @@ from Feedback import Feedback
 
 import requests, json
 
-url = 'http://localhost:8000/shopserverinfo'
+#url = 'http://localhost:8000/shopserverinfo'
+#http://5f17aeb2.ngrok.com first one 3f1911c9
+url = 'http://5f17aeb2.ngrok.com/shopserverinfo'
 fname = 'newitems.txt'
 
 class UpdateShopServer(Command):

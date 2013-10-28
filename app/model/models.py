@@ -87,7 +87,7 @@ class SoldStock(db.Model):
     self.timeStamps = timeStamp
 
 class Category(db.Model):
-    __tablename__ = "Category"
+    __tablename__ = "category"
     
     categoryId = db.Column(db.String(256),primary_key= True) 
     categoryDescription = db.Column(db.String(256),nullable = False)
