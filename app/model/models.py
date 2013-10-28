@@ -58,7 +58,7 @@ class Location(db.Model):
 
 class Stock(db.Model):
 
-  __tablename__ = "Stock"
+  __tablename__ = "stock"
 
   barcode = db.Column(db.String(256), primary_key = True)
   shopId = db.Column(db.String(256))
@@ -71,7 +71,7 @@ class Stock(db.Model):
 
 class SoldStock(db.Model):
 
-  __tablename__ = "SoldStock"
+  __tablename__ = "soldstock"
 
   barcode = db.Column(db.String(256), primary_key = True)
   priceSold = db.Column(db.Float,nullable = False)
@@ -101,7 +101,7 @@ class Category(db.Model):
 
 class Manufacturers(db.Model):    
     
-  __tablename__ = "Manufacturers"
+  __tablename__ = "manufacturers"
   
   manufacturerId = db.Column(db.String(256),primary_key= True)  
   name = db.Column(db.String(256),nullable = False)
@@ -113,7 +113,7 @@ class Manufacturers(db.Model):
        self.isContractValid = isContractValid 
 
 class Products(db.Model):
-    __tablename__= "Products"  
+    __tablename__= "products"  
     
     barcode = db.Column(db.String(256),primary_key= True)
     name = db.Column(db.String(256),nullable = False)
