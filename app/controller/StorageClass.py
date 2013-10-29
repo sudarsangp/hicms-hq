@@ -214,8 +214,14 @@ class StorageClass(object):
     def set_product_details(self, formData):
         flag = 0
         updateproduct = Products.query.filter_by(barcode = formData.barcode.data).first()
-        if updateproduct.price == formData.price.data and updateproduct.minStock == formData.minStock.data and updateproduct.bundleUnit == formData.bundleUnit.data :
-            flag = 1
+        if updateproduct.price == float(formData.price.data):
+            if updateproduct.minStock == long(formData.minStock.data):
+                if updateproduct.bundleUnit == long(formData.bundleUnit.data):
+                    flag = 1
+        #print type(updateproduct.price), type(formData.price.data)
+        #print  type(updateproduct.minStock) ,type(formData.minStock.data)
+        #print type(updateproduct.bundleUnit) ,type(formData.bundleUnit.data)
+        #print flag
         updateproduct.price = formData.price.data
         updateproduct.minStock = formData.minStock.data
         updateproduct.cacheStockQty = formData.cacheStockQty.data
