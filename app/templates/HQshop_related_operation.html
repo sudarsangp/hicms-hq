@@ -23,7 +23,7 @@
 	<h3> Inventory Related </h3>
 	<div> 
 	{% for subfield in form.operations %}
-	  {% if loop.index >=6 and loop.index <= 11 %}
+	  {% if loop.index >=6 and loop.index <= 13 %}
 		 <tr>
         <td>{{ subfield }}</td>
         <td>{{ subfield.label }}</td>
@@ -38,7 +38,7 @@
 	<h3> Transaction Related </h3>
 	<div> 
 	{% for subfield in form.operations %}
-	  {% if loop.index >=12 and loop.index <= 13 %}
+	  {% if loop.index >=14 and loop.index <= 15 %}
 		 <tr>
         <td>{{ subfield }}</td>
         <td>{{ subfield.label }}</td>
@@ -53,7 +53,7 @@
 	<h3> Other Currently </h3>
 	<div> 
 	{% for subfield in form.operations %}
-	  {% if loop.index >13 %}
+	  {% if loop.index >15 %}
 		 <tr>
         <td>{{ subfield }}</td>
         <td>{{ subfield.label }}</td>

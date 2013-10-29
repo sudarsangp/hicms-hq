@@ -278,3 +278,11 @@ class StorageClass(object):
             return formData.quantity.data
         else:
             return -2
+
+    def get_stock_from_db(self):
+        existingStock = Stock.query.all()
+        return existingStock
+
+    def get_stock_grouped_shopId(self, enteredShopId):
+        stockbyshopid = Stock.query.filter_by(shopId = enteredShopId).all()
+        return stockbyshopid

@@ -1,0 +1,23 @@
+{% extends "baselayout.html" %}
+ 
+{% block content %}
+
+<table class="table">
+<thead>
+	<tr>
+		<th> Barcode </th>
+		<th> ShopId </th>
+		<th> StockQty </th>
+	</tr>
+</thead>
+<tbody>
+{% for stockobj in allstocks %}
+<tr>
+<td>{{ stockobj.barcode }} </td>
+<td>{{ stockobj.shopId }} </td>
+<td>{{ stockobj.stockQty }} </td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}

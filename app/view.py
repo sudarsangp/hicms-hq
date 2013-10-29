@@ -123,11 +123,34 @@ def hq_functions():
     elif operation == "transactiongroupedbyshop":
       return redirect(url_for('transaction_grouped_by_shop', operation = operation))
 
+    elif operation == "viewstock":
+      return redirect(url_for('view_stock', operation = operation))
+
+    elif operation == "stockgroupedbyshop":
+      return redirect(url_for('stock_grouped_by_shop', operation = operation))
+
     else:
       #print operation
       return "Mapping not yet implemented"
   elif request.method == "GET":
     return render_template('HQshop_related_operation.html', form = form)
+
+@app.route('/stockgroupedbyshop/<operation>', methods = ['GET', 'POST'])
+def stock_grouped_by_shop(operation):
+  form = SearchShopId()
+  if request.method == "POST":
+    logicObject = Logic.Logic()
+    stockobjbyshop = logicObject.execute(operation,form)
+    return render_template('listingstocks.html', allstocks = stockobjbyshop)
+
+  elif request.method == 'GET':
+    return render_template('searchshopid.html',form = form)
+
+@app.route('/stockdisplayall/<operation>')
+def view_stock(operation):
+  logicObject = Logic.Logic()
+  allstocks = logicObject.execute(operation, None)
+  return render_template('listingstocks.html', allstocks = allstocks)
 
 @app.route('/transactiongroupedbyshop/<operation>', methods = ['GET', 'POST'])
 def transaction_grouped_by_shop(operation):

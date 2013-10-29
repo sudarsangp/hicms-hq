@@ -25,4 +25,26 @@ class AddStock(Command):
         return self.feedbackObject
 
     def check_existing_item(self, formData):
-        return self.storageObject.check_if_stock_exists(formData) 
+        return self.storageObject.check_if_stock_exists(formData)
+
+class ViewStock(Command):
+    def __init__(self):
+        self.storageObject = StorageClass()
+        self.feedbackObject = Feedback()
+
+    def execute(self, formData):
+        return self.get_stock()
+
+    def get_stock(self):
+        return self.storageObject.get_stock_from_db()
+
+class SearchStockByShopId(Command):
+    def __init__(self):
+        self.storageObject = StorageClass()
+        self.feedbackObject = Feedback()
+
+    def execute(self, formData):
+        return self.get_stock_for_shopId(formData)
+
+    def get_stock_for_shopId(self, formData):
+        return self.storageObject.get_stock_grouped_shopId(formData.shopId.data)
