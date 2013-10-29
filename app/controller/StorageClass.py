@@ -214,7 +214,7 @@ class StorageClass(object):
     def set_product_details(self, formData):
         flag = 0
         updateproduct = Products.query.filter_by(barcode = formData.barcode.data).first()
-        if updateproduct.price == formData.price.data and updateproduct.minStock == formData.minStock.data and updateproduct.bundleUnit = formData.bundleUnit.data :
+        if updateproduct.price == formData.price.data and updateproduct.minStock == formData.minStock.data and updateproduct.bundleUnit == formData.bundleUnit.data :
             flag = 1
         updateproduct.price = formData.price.data
         updateproduct.minStock = formData.minStock.data
