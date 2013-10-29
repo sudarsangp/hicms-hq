@@ -212,25 +212,27 @@ class StorageClass(object):
         db.session.commit()
     
     def set_product_details(self, formData):
-
+        flag = 0
         updateproduct = Products.query.filter_by(barcode = formData.barcode.data).first()
+        if updateproduct.price == formData.price.data and updateproduct.minStock == formData.minStock.data and updateproduct.bundleUnit = formData.bundleUnit.data :
+            flag = 1
         updateproduct.price = formData.price.data
         updateproduct.minStock = formData.minStock.data
         updateproduct.cacheStockQty = formData.cacheStockQty.data
         updateproduct.bundleUnit = formData.bundleUnit.data
         db.session.commit()
-        
-        f = open(fname,'a')
-        prodall = {}
-        textprod = {}
-        textprod['barcode'] = formData.barcode.data
-        textprod['price'] = formData.price.data
-        textprod['minStock'] = formData.minStock.data
-        textprod['bundleUnit'] = formData.bundleUnit.data
-        prodall['editproducts'] = textprod
-        f.write(";")
-        f.write(str(prodall))
-        f.close()
+        if flag == 0:
+            f = open(fname,'a')
+            prodall = {}
+            textprod = {}
+            textprod['barcode'] = formData.barcode.data
+            textprod['price'] = formData.price.data
+            textprod['minStock'] = formData.minStock.data
+            textprod['bundleUnit'] = formData.bundleUnit.data
+            prodall['editproducts'] = textprod
+            f.write(";")
+            f.write(str(prodall))
+            f.close()
 
     def delete_product_info(self, enteredBarcode):
         allstockforbarcode = Stock.query.filter_by(barcode = enteredBarcode).all()
