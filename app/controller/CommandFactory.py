@@ -15,7 +15,7 @@ from LocationOperations import AddLocation, ViewLocation
 from StockOperations import AddStock
 from ManufacturerOperations import AddManufacturer,ViewManufacturers
 from CategoryOperations import AddCategory,ViewCategories
-from ProductOperations import AddProduct, ViewProduct, SearchProductBarcode, RetrieveProduct, UpdateProduct, DeleteProduct
+from ProductOperations import AddProduct, ViewProduct, SearchProductBarcode, RetrieveProduct, UpdateProduct, DeleteProduct, HQCacheStock
 from UserOperations import BuyItem
 from SoldStockOperations import AddSoldStock, ViewSoldStock, SearchSoldStockByShopId
 
@@ -114,3 +114,6 @@ class CommandFactory(object):
             transactionByShopCommand = SearchSoldStockByShopId()
             return transactionByShopCommand
      
+        elif operation == "cachestockqty":
+            productStockCommand = HQCacheStock()
+            return productStockCommand

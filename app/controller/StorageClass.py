@@ -267,3 +267,14 @@ class StorageClass(object):
     def get_transaction_grouped_shopId(self, enteredShopId):
         transactionsbyshopid = SoldStock.query.filter_by(shopId = enteredShopId).all()
         return transactionsbyshopid
+
+    def get_cachestockqty_from_product(self,formData):
+        existingprod = Products.query.filter_by(barcode = formData.barcode.data).first()
+        #print formData.quantity.data, type(formData.quantity.data)
+        #print existingprod.cacheStockQty, type(existingprod.cacheStockQty)
+        if long(formData.quantity.data) <=  existingprod.cacheStockQty:
+            existingprod.cacheStockQty -= long(formData.quantity.data)
+            db.session.commit()
+            return formData.quantity.data
+        else:
+            return -2

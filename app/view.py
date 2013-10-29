@@ -122,8 +122,9 @@ def hq_functions():
 
     elif operation == "transactiongroupedbyshop":
       return redirect(url_for('transaction_grouped_by_shop', operation = operation))
+
     else:
-      print operation
+      #print operation
       return "Mapping not yet implemented"
   elif request.method == "GET":
     return render_template('HQshop_related_operation.html', form = form)
@@ -485,7 +486,22 @@ def allow_download():
       contentdata = f.read()
       list_content = contentdata.split(';')
       send_json = {'update': list_content}
+      f.close()
       return jsonify(send_json)
   except IOError:
       no_file = {'update':'No file'}
       return jsonify(no_file)
+
+@app.route('/getstock', methods = ['GET'])
+def get_stock():
+  form = BuyItem()
+  indata = request.data
+  dict_bar_quantity = json.loads(indata)
+  form.barcode.data = dict_bar_quantity['barcode']
+  form.quantity.data = dict_bar_quantity['quantity']
+  #print form.barcode.data, form.quantity.data
+  logicObject = Logic.Logic()
+  res = logicObject.execute('cachestockqty', form)
+  quan_dict = {'quantity':res}
+  return jsonify(quan_dict)
+

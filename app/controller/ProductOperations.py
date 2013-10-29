@@ -125,3 +125,16 @@ class DeleteProduct(Command):
             self.feedbackObject.setdata("barcode not found")
             self.feedbackObject.setcommandtype("Delete Product")
         return self.feedbackObject
+
+class HQCacheStock(Command):
+    def __init__(self):
+        self.storageObject = StorageClass()
+
+    def execute(self, formData):
+        inverted = self.storageObject.check_if_Product_exists(formData)
+        actual = not inverted
+        if actual:
+            quant = self.storageObject.get_cachestockqty_from_product(formData)
+            return quant
+        else:
+            return -1
