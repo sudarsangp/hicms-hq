@@ -117,9 +117,6 @@ def hq_functions():
     elif operation == "addlocation":
       return redirect(url_for('enterlocation', operation = operation))   
 
-    elif operation == "sendinventory":
-      return redirect(url_for('send_inventory', operation = operation))
-
     elif operation == "viewtransactions":
       return redirect(url_for('view_all_transaction', operation = operation))
 
@@ -147,12 +144,6 @@ def view_all_transaction(operation):
   logicObject = Logic.Logic()
   alltransactions = logicObject.execute(operation, None)
   return render_template('listingtransactions.html', alltransactions = alltransactions)
-
-@app.route('/sendinventory/<operation>', methods = ['POST','GET'])
-def send_inventory(operation):
-  logicObject = Logic.Logic()
-  feedback = logicObject.execute(operation,None)
-  return render_template('feedback.html', feedback = feedback)
 
 @app.route('/deleteproduct/<operation>', methods = ['POST', 'GET'])
 def delete_product(operation):
@@ -484,4 +475,17 @@ def server_info():
     feedback = logicObject.execute('addsoldstock',soldstock_form)
 
   return str(stock_soldstock)
-  
+
+@app.route('/download', methods = ['GET'])
+def allow_download():
+  fname = 'newitems.txt'
+  try:
+    with open(fname):
+      f = open(fname,"r")
+      contentdata = f.read()
+      list_content = contentdata.split(';')
+      send_json = {'update': list_content}
+      return jsonify(send_json)
+  except IOError:
+      no_file = {'update':'No file'}
+      return jsonify(no_file)

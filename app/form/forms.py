@@ -60,7 +60,6 @@ class HQAdminFunction(Form):
   operations = RadioField('operations', choices = [('addshop','Create Shop'),('retrieveshop', 'Retrieve Shop'),('updateshop','Update Shop'),('deleteshop','Delete Shop'),('viewshops','List All Shops'),
     ('addproduct','Add Product'),('retrieveproduct','Retrieve Product'),('updateproduct', 'Update Product'),('deleteproduct', 'Delete Product'),('viewproducts','View All Products'),('activepricing','Active Pricing'),
     ('viewtransactions','List All Transaction'),('transactiongroupedbyshop','Grouped by Shop'),
-    ('sendinventory','Send Inventory'),
     ('addlocation','Add Location'),('addcategory','Add Category'),('addmanufacturer','Add Manufacturer'),('addcustomer','Add Customer'),('addstock', 'Add Stock'),
     ('editcustomer','Edit Customer'),
     ('removecustomer','Remove Customer')])
