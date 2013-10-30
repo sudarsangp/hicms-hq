@@ -76,8 +76,8 @@ class SoldStock(db.Model):
   barcode = db.Column(db.String(256), primary_key = True)
   priceSold = db.Column(db.Float,nullable = False)
   unitSold = db.Column(db.Integer,nullable = False)
-  shopId = db.Column(db.String(256))
-  timeStamps = db.Column(db.TIMESTAMP)
+  shopId = db.Column(db.String(256),primary_key = True)
+  timeStamps = db.Column(db.TIMESTAMP,primary_key = True)
 
   def __init__(self, barcode, priceSold, unitSold, shopId, timeStamp):
     self.barcode = barcode

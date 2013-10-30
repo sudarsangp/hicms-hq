@@ -12,7 +12,7 @@ Created on Sep 10, 2013
 from CustomerOperations import AddCustomer
 from ShopOperations import AddShop, ViewShops, RetrieveShop, UpdateShop, DeleteShop
 from LocationOperations import AddLocation, ViewLocation
-from StockOperations import AddStock, ViewStock, SearchStockByShopId
+from StockOperations import AddStock, ViewStock, SearchStockByShopId, UpdateStock
 from ManufacturerOperations import AddManufacturer,ViewManufacturers
 from CategoryOperations import AddCategory,ViewCategories
 from ProductOperations import AddProduct, ViewProduct, SearchProductBarcode, RetrieveProduct, UpdateProduct, DeleteProduct, HQCacheStock
@@ -130,3 +130,7 @@ class CommandFactory(object):
         elif operation == "changeprice":
             changepriceCommand = PriceCalculator()
             return changepriceCommand
+        
+        elif operation == "updatestock":
+            updateStockCommand = UpdateStock()
+            return updateStockCommand

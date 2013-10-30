@@ -491,7 +491,11 @@ def server_info():
     stock_form.shopId.data = stock_info['ShopId']
     stock_form.stockQty.data = stock_info['Stock']
     feedback = logicObject.execute('addstock',stock_form)
-
+    if feedback.getcommandtype() == "AddStock":
+      #print "entering"
+      feedback = logicObject.execute('updatestock',stock_form)
+  
+  print soldstock_list
   for j in range(len(soldstock_list)):
     soldstock_info = literal_eval(json.dumps(soldstock_list[j]))
     soldstock_form.barcode.data = soldstock_info['Barcode']
@@ -499,7 +503,12 @@ def server_info():
     soldstock_form.unitSold.data = soldstock_info['unitSold']
     soldstock_form.shopId.data = soldstock_info['ShopId']
     soldstock_form.timeStamps.data = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+    print soldstock_form.timeStamps.data
     feedback = logicObject.execute('addsoldstock',soldstock_form)
+    print feedback.getinfo()
+    print feedback.getdata()
+    print feedback.getcommandtype()
+
 
   return str(stock_soldstock)
 

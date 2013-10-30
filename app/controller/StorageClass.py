@@ -332,4 +332,9 @@ class StorageClass(object):
             bar_price.append(dict_bar_price)
         return bar_price
 
+    def update_stock(self, formData):
+        existingStock = Stock.query.filter_by(barcode = formData.barcode.data , shopId = formData.shopId.data).first()
+        existingStock.stockQty = formData.stockQty.data
+        db.session.commit()
+
 

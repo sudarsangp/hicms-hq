@@ -11,15 +11,15 @@ class AddSoldStock(Command):
     def execute(self,formData):
 
         if self.check_existing_item(formData):
-            self.feedbackObject.setinfo("Failed :Duplicate Data present cannot be added")
-            self.feedbackObject.setdata(formData.barcode.data)
-            self.feedbackObject.setcommandtype("AddStock")
-     
-        else:
+        
             self.storageObject.add_sold_stock_to_database(formData)
             self.feedbackObject.setinfo("Success: data added ")
             self.feedbackObject.setdata(formData.barcode.data)
-            self.feedbackObject.setcommandtype("AddStock")
+            self.feedbackObject.setcommandtype("AddSoldStock")
+        else:
+            self.feedbackObject.setinfo("Failed :Duplicate Data present cannot be added")
+            self.feedbackObject.setdata(formData.barcode.data)
+            self.feedbackObject.setcommandtype("AddSoldStock")
      
         return self.feedbackObject
 
