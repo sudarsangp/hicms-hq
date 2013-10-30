@@ -320,6 +320,8 @@ class StorageClass(object):
             #print totalCurrentStock
             #print totalMinStock
             #print newPrice
+            newPrice = 0.05*round(newPrice/0.05)
+            newPrice = int(newPrice*100)/100.0
             return newPrice
 
     def all_barcode_acitve_price(self):
