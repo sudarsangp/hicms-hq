@@ -3,7 +3,7 @@ from flask.ext.login import login_required
 from app import app, login_manager
 
 from form.forms import RegisterShopForm, SignupForm, SigninForm, ShopAdminFunction, AddCustomer ,AddManufacturer , AddStock, AddCategory, AddProduct, BuyItem
-from form.forms import SearchBarcode, LocationShopForm, HQAdminFunction, RetrieveShop, UpdateShopForm, UpdateProductForm, StockForm, SoldStockForm, SearchShopId
+from form.forms import SearchBarcode, LocationShopForm, HQAdminFunction, RetrieveShop, UpdateShopForm, UpdateProductForm, StockForm, SoldStockForm, SearchShopId, PriceCalculator
 
 from model.models import Check, User, db, Customer
 from controller import Logic
@@ -129,6 +129,9 @@ def hq_functions():
     elif operation == "stockgroupedbyshop":
       return redirect(url_for('stock_grouped_by_shop', operation = operation))
 
+    elif operation == "changeprice":
+      return redirect(url_for('change_price', operation = operation))
+ 
     else:
       #print operation
       return "Mapping not yet implemented"
@@ -528,3 +531,31 @@ def get_stock():
   quan_dict = {'quantity':res}
   return jsonify(quan_dict)
 
+
+
+@app.route('/changeprice/<operation>', methods = ['GET', 'POST'])
+def change_price(operation):
+    #form = PriceCalculator()
+    
+    global all_bar_price
+    all_bar_price = []
+    logicObject = Logic.Logic()
+    #if request.method == 'POST':
+    #barcode_cp = form.barcode.data
+    all_bar_price = logicObject.execute(operation, None)
+    #newprice = feedback.getdata()
+    #print newprice
+    return str(all_bar_price)
+    #return render_template('changeprice.html', alldata = all_bar_price)
+
+    #elif request.method == 'GET':
+    # return render_template('changeprice.html', form = form)
+
+@app.route('/getprice', methods = ['GET'])
+def get_price():
+  #return str(all_bar_price)
+  #indata = request.data
+  #dict_barcode = json.loads(indata)
+  #inbarcode = dict_barcode['barcode']
+  price_bar = {'barcodeprice':all_bar_price}
+  return jsonify(price_bar)

@@ -18,6 +18,7 @@ from CategoryOperations import AddCategory,ViewCategories
 from ProductOperations import AddProduct, ViewProduct, SearchProductBarcode, RetrieveProduct, UpdateProduct, DeleteProduct, HQCacheStock
 from UserOperations import BuyItem
 from SoldStockOperations import AddSoldStock, ViewSoldStock, SearchSoldStockByShopId
+from PriceCalculator import PriceCalculator
 
 class CommandFactory(object):
     
@@ -125,3 +126,7 @@ class CommandFactory(object):
         elif operation == "stockgroupedbyshop":
             stockGroupedByShopCommand = SearchStockByShopId()
             return stockGroupedByShopCommand
+
+        elif operation == "changeprice":
+            changepriceCommand = PriceCalculator()
+            return changepriceCommand

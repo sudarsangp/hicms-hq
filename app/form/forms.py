@@ -58,7 +58,7 @@ class ShopAdminFunction(Form):
 
 class HQAdminFunction(Form):
   operations = RadioField('operations', choices = [('addshop','Create Shop'),('retrieveshop', 'Retrieve Shop'),('updateshop','Update Shop'),('deleteshop','Delete Shop'),('viewshops','List All Shops'),
-    ('addproduct','Add Product'),('retrieveproduct','Retrieve Product'),('updateproduct', 'Update Product'),('deleteproduct', 'Delete Product'),('viewproducts','View All Products'),('activepricing','Active Pricing'),('viewstock','View Stock'),('stockgroupedbyshop','Stock By Shop'),
+    ('addproduct','Add Product'),('retrieveproduct','Retrieve Product'),('updateproduct', 'Update Product'),('deleteproduct', 'Delete Product'),('viewproducts','View All Products'),('changeprice','Active Pricing'),('viewstock','View Stock'),('stockgroupedbyshop','Stock By Shop'),
     ('viewtransactions','List All Transaction'),('transactiongroupedbyshop','Grouped by Shop'),
     ('addlocation','Add Location'),('addcategory','Add Category'),('addmanufacturer','Add Manufacturer'),('addcustomer','Add Customer'),('addstock', 'Add Stock'),
     ('editcustomer','Edit Customer'),
@@ -163,6 +163,12 @@ class SearchShopId(Form):
 
   def __init__(self, *args, **kwargs):
     Form.__init__(self, *args, **kwargs)
+
+class PriceCalculator(Form):
+  barcode = TextField('Enter Barcode')
+
+  def __init__(self, *args, **kwargs):
+    Form.__init__(self,*args,**kwargs)
 
 ################################################################################################################################################
 class SignupForm(Form):

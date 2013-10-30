@@ -1,0 +1,23 @@
+{% extends "baselayout.html" %}
+ 
+{% block content %}
+
+<table class="table">
+<thead>
+	<tr>
+		<th> Barcode </th>
+		<th> New Price </th>
+	</tr>
+</thead>
+<tbody>
+{% for alldict in all_bar_price %}
+<tr>
+{% for key in alldict %}
+<td>{{ key }} </td>
+<td>{{ alldict[key] }} </td>
+{% endfor %}
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}

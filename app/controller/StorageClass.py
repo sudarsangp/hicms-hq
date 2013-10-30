@@ -7,11 +7,15 @@
 
 from app.model.models import db, Customer,Shops, Location, Manufacturers,Category,Products, Stock, SoldStock
 from flask import session
+from Feedback import Feedback
 
 fname = 'newitems.txt'
 
 class StorageClass(object):
     
+    def __init__(self):
+        self.feedbackObject = Feedback()
+
     def addCustomerTODatabase(self,formData):
         newCustomerData = Customer(formData.customername.data,formData.customeraddress.data,
                                    formData.handphone.data,formData.customerId.data,formData.dateofjoining.data,
@@ -286,3 +290,44 @@ class StorageClass(object):
     def get_stock_grouped_shopId(self, enteredShopId):
         stockbyshopid = Stock.query.filter_by(shopId = enteredShopId).all()
         return stockbyshopid
+
+    def priceCalculator(self,enteredBarcode):
+        totalCurrentStock = 0;
+        temptotalCurrentStock = Stock.query.filter(Stock.barcode == enteredBarcode).all()
+        for row in temptotalCurrentStock :
+            totalCurrentStock += row.stockQty
+        totalshops = Shops.query.distinct(Shops.shopId).count()
+        productToCalculate = Products.query.filter_by(barcode = enteredBarcode).first()
+        oldPrice = productToCalculate.price
+        totalMinStock = totalshops * productToCalculate.minStock
+        #print type(oldPrice)
+        #print oldPrice 
+        if totalshops == 0:
+            self.feedbackObject.setinfo("Sorry there are no shops")
+        elif productToCalculate.minStock == 0:
+            self.feedbackObject.setinfo("minStock is zero. Please check inventory")
+         
+        else:
+
+            newPrice = oldPrice*(1-(((totalCurrentStock-totalMinStock)/totalMinStock)*0.05))    
+            productToCalculate.price = newPrice
+            self.feedbackObject.setdata(newPrice)
+            self.feedbackObject.setcommandtype("Active Price")
+            self.feedbackObject.setinfo("Success: oldprice :" + str(oldPrice) + " newprice:" + str(newPrice))
+            #db.session.add(productToCalculate)
+            #db.session.commit()
+            #print totalshops
+            #print totalCurrentStock
+            #print totalMinStock
+            #print newPrice
+            return newPrice
+
+    def all_barcode_acitve_price(self):
+        bar_price = []
+        for oneprod in Products.query.all():
+            newprice = self.priceCalculator(oneprod.barcode)
+            dict_bar_price = {'barcode':oneprod.barcode,'newprice':newprice}
+            bar_price.append(dict_bar_price)
+        return bar_price
+
+
