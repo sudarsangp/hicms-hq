@@ -503,11 +503,11 @@ def server_info():
     soldstock_form.unitSold.data = soldstock_info['unitSold']
     soldstock_form.shopId.data = soldstock_info['ShopId']
     soldstock_form.timeStamps.data = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
-    print soldstock_form.timeStamps.data
+    #print soldstock_form.timeStamps.data
     feedback = logicObject.execute('addsoldstock',soldstock_form)
-    print feedback.getinfo()
-    print feedback.getdata()
-    print feedback.getcommandtype()
+    #print feedback.getinfo()
+    #print feedback.getdata()
+    #print feedback.getcommandtype()
 
 
   return str(stock_soldstock)
