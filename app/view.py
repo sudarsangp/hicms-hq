@@ -474,6 +474,7 @@ def db_check():
 #to check server information
 @app.route('/serverinfo', methods = ['POST']) 
 def server_info():
+  print "hello"
   stock_soldstock = request.data
   stock_soldstock_dict = json.loads(stock_soldstock)
   stock_info = {}
@@ -496,6 +497,7 @@ def server_info():
     #  feedback = logicObject.execute('updatestock',stock_form)
   
   print soldstock_list
+  print len(soldstock_list)
   for j in range(len(soldstock_list)):
     soldstock_info = literal_eval(json.dumps(soldstock_list[j]))
     soldstock_form.barcode.data = soldstock_info['Barcode']
@@ -505,9 +507,9 @@ def server_info():
     soldstock_form.timeStamps.data = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
     #print soldstock_form.timeStamps.data
     feedback = logicObject.execute('addsoldstock',soldstock_form)
-    #print feedback.getinfo()
-    #print feedback.getdata()
-    #print feedback.getcommandtype()
+    print feedback.getinfo()
+    print feedback.getdata()
+    print feedback.getcommandtype()
 
 
   return str(stock_soldstock)
