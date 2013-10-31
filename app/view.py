@@ -491,9 +491,9 @@ def server_info():
     stock_form.shopId.data = stock_info['ShopId']
     stock_form.stockQty.data = stock_info['Stock']
     feedback = logicObject.execute('addstock',stock_form)
-    if feedback.getcommandtype() == "AddStock":
+    #if feedback.getcommandtype() == "AddStock":
       #print "entering"
-      feedback = logicObject.execute('updatestock',stock_form)
+    #  feedback = logicObject.execute('updatestock',stock_form)
   
   print soldstock_list
   for j in range(len(soldstock_list)):
