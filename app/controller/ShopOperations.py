@@ -15,7 +15,10 @@ class AddShop(Command):
             self.feedbackObject.setinfo("Success: data added ")
             self.feedbackObject.setdata(formData.shopId.data)
             self.feedbackObject.setcommandtype("AddShop")
-
+        else:
+            self.feedbackObject.setinfo("Faiure: data present already ")
+            self.feedbackObject.setdata("data present")
+            self.feedbackObject.setcommandtype("AddShop")
         return self.feedbackObject
 
     def __check_database(self, formData):

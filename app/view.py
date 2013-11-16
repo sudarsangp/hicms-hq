@@ -10,6 +10,7 @@ from controller import Logic
 
 import requests, json, time, datetime
 from ast import literal_eval
+from operator import itemgetter
 
 @app.route('/check')
 def default():
@@ -71,11 +72,15 @@ def profile():
     return redirect(url_for('signin'))
  
   user = User.query.filter_by(email = session['email']).first()
- 
+  print user.uid 
+  print user.firstname
+  print user.lastname
+  print user.email
+
   if user is None:
     return redirect(url_for('signin'))
   else:
-    return render_template('profile.html')
+    return render_template('profile.html',user = user)
 ##############################################################################################
 
 @app.route('/hq', methods = ['POST', 'GET'])
@@ -308,23 +313,33 @@ def enterlocation(operation):
 def addshop(operation):
   logicObject = Logic.Logic()
   locationsall = logicObject.execute('viewlocation',None)
+  loc_city_country = [(locationobj.city, locationobj.country) for locationobj in locationsall]
+  #print loc_city_country
   location_choices_city = [(locationobj.city, locationobj.city) for locationobj in locationsall]
   location_choices_country = [(locationobj.country, locationobj.country) for locationobj in locationsall]
-
+  location_choices_city = sorted(location_choices_city, key = itemgetter(1))
+  location_choices_country = sorted(location_choices_country, key = itemgetter(1))
   
   #location_choices_city, location_choices_country = [(locationobj.city,locationobj.city),(locationobj.country,locationobj.country) for locationobj in locationsall]
-  location_choices_city.append(('-1','None'))
-  location_choices_country.append(('-1', 'None'))
+  location_choices_city.append(('znone','None'))
+  location_choices_country.append(('znone', 'None'))
   form = RegisterShopForm()
   form.city.choices = location_choices_city
   form.country.choices = location_choices_country
   if request.method == "POST": 
-    
-    if form.city.data == "none" or form.country.data == "none" :
+    city_country_pair = (form.city.data,form.country.data)
+    if city_country_pair in loc_city_country:
+      feedback = logicObject.execute(operation, form)
+
+    elif str(form.city.data) == "znone" or str(form.country.data) == "znone" :
       logicObject.execute("addlocation",form.emformlocation)
       form.city.data = form.emformlocation.city.data
       form.country.data = form.emformlocation.country.data
-    feedback = logicObject.execute(operation, form)
+      feedback = logicObject.execute(operation, form) 
+    else:
+      return render_template('feedbackregistershop.html',form = form, citycountry = loc_city_country)
+         
+    
     return render_template('feedback.html', feedback = feedback)
 
   elif request.method == "GET":    

@@ -1,7 +1,18 @@
 {% extends "baselayout.html" %}
 {% block content %}
-  <div class="jumbo">
+{#  <div class="jumbo">
     <h2>Profile<h2>
     <h3>This is {{ session['email'] }}'s profile page<h3>
   </div>
+  #}
+
+<dl class="dl-horizontal">
+  <dt>First Name</dt>
+  <dd>Foo</dd>
+  <dt>Last Name</dt>
+  <dd>Bar</dd>
+  <dt>Job</dt>
+  <dd>Something</dd>
+</dl>
+<button type="button" class="btn btn-success">Success</button>
 {% endblock %}

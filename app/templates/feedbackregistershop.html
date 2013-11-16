@@ -2,6 +2,26 @@
 
 {% block content %}
 
+<div id="content" style="height:200px;width:400px;float:right;">
+<h4>Enter one of the following City Country Pair</h4>
+<table class="table table-hover table-bordered">
+	<thead>
+	<tr class="active">
+		<th> City </th>
+		<th> Country </th>
+	</tr>
+</thead>
+<tbody>
+{% for city, country in citycountry %}
+<tr>
+    <td>{{ city }} </td>
+    <td>{{ country }} </td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+
 <form action="" method="post" name="registershop" role = "form" class="form">
 	<div class="row">
 	<div class = "form-group col-lg-3">	
