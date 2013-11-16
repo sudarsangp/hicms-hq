@@ -8,7 +8,7 @@ class AddLocation(Command):
         self.feedbackObject = Feedback()
 
     def execute(self,formData):
-        print "here addlocation"
+        
         if self.__check_database(formData):
 
             self.storageObject.add_location_to_database(formData)

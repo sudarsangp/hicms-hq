@@ -2,10 +2,17 @@
  
 {% block content %}
 
-<form action="" method = post>
-	Enter Shop Id
-	{{ form.shopId }} <br>
-		
-	<input type="submit" value="Submit Shop Operation">
+<form action="" method="post"  role = "form" class="form">
+	<div class="row">
+	<div class = "form-group col-lg-3">	
+		<label class="control-label">Enter Shop Id </label>
+		<div {% if form.shopId.errors %} class = "has-error" {% else %} class="" {% endif %} >
+			{{ form.shopId(class="form-control") }} 
+		</div>
+	</div>
+	</div>
+	<div class="form-group">
+		<input type="submit" value="Submit" class="btn btn-primary">
+	</div>
 </form>
 {% endblock %}
