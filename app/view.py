@@ -337,7 +337,8 @@ def addshop(operation):
       form.country.data = form.emformlocation.country.data
       feedback = logicObject.execute(operation, form) 
     else:
-      return render_template('feedbackregistershop.html',form = form, citycountry = loc_city_country)
+      country_city = [(locationobj.city, locationobj.country) for locationobj in locationsall if locationobj.country == str(form.country.data)]
+      return render_template('feedbackregistershop.html',form = form, citycountry = country_city)
          
     
     return render_template('feedback.html', feedback = feedback)
