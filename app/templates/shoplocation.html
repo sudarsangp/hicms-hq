@@ -1,17 +1,42 @@
 {% extends "baselayout.html" %}
 
 {% block content %}
-<form action="" method="post" name="locationshop">
-	<p> Enter City
-		{{form.city}}<br>
-		Enter Country
-		{{form.country}}<br>
-		Enter Tax
-		{{form.tax}}<br>
-		Enter Distance
-		{{form.distance}}<br>
-	    
-		<p><input type="submit" value="Submit">
-	</p>
+<form action = "" method = "post" role = "form" class="form">
+	<div class="row">
+	<div class = "form-group col-lg-3">	
+		<label class="control-label"> Enter City</label>
+		<div {% if form.city.errors %} class = "has-error" {% else %} class="" {% endif %} >
+			{{ form.city(class="form-control") }} 
+		</div>
+	</div>
+	</div>
+	<div class="row">
+	<div class = "form-group col-lg-3">
+		<label class="control-label">Enter Country</label>
+		<div {% if form.country.errors %} class = "has-error" {% else %} class="" {% endif %} >
+			{{ form.country(class="form-control") }} 
+		</div>
+	</div>
+	</div>
+	<div class="row">
+	<div class = "form-group col-lg-3">	
+		<label class="control-label"> Enter Tax</label>
+		<div {% if form.tax.errors %} class = "has-error" {% else %} class="" {% endif %} >
+			{{ form.tax(class="form-control") }} 
+		</div>
+	</div>
+	</div>
+	<div class="row">
+	<div class = "form-group col-lg-3">
+		<label class="control-label">Enter Distance</label>
+		<div {% if form.distance.errors %} class = "has-error" {% else %} class="" {% endif %} >
+			{{ form.distance(class="form-control") }} 
+		</div>
+	</div>
+	</div>
+	
+	<div class="form-group">
+		<input type="submit" value="Add Location" class="btn btn-success">
+	</div>
 </form>
 {% endblock %}

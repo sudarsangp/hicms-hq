@@ -15,11 +15,11 @@
 <tbody>
 {% for transactionobj in alltransactions %}
 <tr>
-<td>{{ transactionobj.barcode }} </td>
+<td style="color:blue">{{ transactionobj.barcode }} </td>
 <td>{{ transactionobj.priceSold }}  </td>
 <td>{{ transactionobj.unitSold }}</td>
-<td>{{ transactionobj.shopId }} </td>
-<td>{{ transactionobj.timeStamps }} </td>
+<td style="color:blue">{{ transactionobj.shopId }} </td>
+<td style="color:blue">{{ transactionobj.timeStamps }} </td>
 </tr>
 {% endfor %}
 </tbody>

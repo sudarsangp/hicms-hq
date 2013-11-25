@@ -61,7 +61,7 @@ class Stock(db.Model):
   __tablename__ = "stock"
 
   barcode = db.Column(db.String(256), primary_key = True)
-  shopId = db.Column(db.String(256))
+  shopId = db.Column(db.String(256), primary_key = True)
   stockQty = db.Column(db.Integer)
   
   def __init__(self, barcode, shopId, stockQty):

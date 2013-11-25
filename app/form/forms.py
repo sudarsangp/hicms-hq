@@ -75,6 +75,17 @@ class AddCustomer(Form):
   def __init__(self, *args, **kwargs):
    Form.__init__(self, *args, **kwargs)
 
+  def validateNotEmpty(self,field):
+    s = field.data
+    s = s.replace(' ','')
+    if len(s) == 0:
+      return 'Cannot give empty space'
+
+  def validateNumber(self,field):
+    s = field.data
+    if re.match("^\D+$",s):
+      return 'please enter only numbers'
+
 class AddManufacturer(Form):
   manufacturerId = TextField('manufacturerId',validators = [validators.Required("Please enter manufacturer Id"), validateNotEmpty])
   mname = TextField('name',validators = [validators.Required("Please enter manufacturer Name"), validateNotEmpty])

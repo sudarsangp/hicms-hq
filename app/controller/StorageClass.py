@@ -85,8 +85,8 @@ class StorageClass(object):
         db.session.commit()
 
     def check_if_stock_exists(self, formData):
-        barcode = Stock.query.filter_by(barcode = formData.barcode.data).first()
-        if barcode:
+        barcodeshop = Stock.query.filter_by(barcode = formData.barcode.data, shopId = formData.shopId.data).first()
+        if barcodeshop:
             return True
         else:
             return False

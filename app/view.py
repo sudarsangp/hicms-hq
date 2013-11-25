@@ -186,7 +186,7 @@ def delete_product(operation):
     return render_template('feedback.html', feedback = feedback)
 
   elif request.method == 'GET':
-    return render_template('searchbarcode.html',form = form)
+    return render_template('deletebarcode.html',form = form)
 
 @app.route('/updateproduct/<operation>', methods = ['POST', 'GET'])
 def update_product(operation):
@@ -239,7 +239,7 @@ def delete_shop(operation):
     return render_template('feedback.html', feedback = feedback)
 
   elif request.method == 'GET':
-    return render_template('retrieveshopId.html',form = form)
+    return render_template('deleteshopid.html',form = form)
 
 @app.route('/updateshop/<operation>', methods = ['POST','GET'])
 def update_shop(operation):
@@ -371,14 +371,22 @@ def view_all_products(operation):
 def addcustomer(operation):
  
   form = AddCustomer()
-  if request.method ==  "POST" and form.validate():
-  
+  msg = ""
+  if request.method ==  "POST" :
+
+    msg =  form.validateNotEmpty(form.customername)
+    if msg == 'Cannot give empty space':
+      return render_template('addcustomer.html', form = form, msg = msg)
+    msg = form.validateNumber(form.handphone)
+    if msg == 'please enter only numbers':
+      return render_template('addcustomer.html', form = form, msg = msg)
+
     logicObject = Logic.Logic()
     feedback = logicObject.execute(operation,form)
     return render_template('feedback.html', feedback = feedback)
     
   elif request.method == 'GET':
-    return render_template('addcustomer.html', form = form)
+    return render_template('addcustomer.html', form = form, msg = msg)
 
 
 @app.route('/manufacturer/<operation>', methods = ['POST', 'GET'])
@@ -490,45 +498,64 @@ def db_check():
 #to check server information
 @app.route('/serverinfo', methods = ['POST']) 
 def server_info():
-  print "hello"
+  #print "hello"
   stock_soldstock = request.data
-  stock_soldstock_dict = json.loads(stock_soldstock)
+  all_data = json.loads(stock_soldstock)
+  for key, value in all_data.items():
+    shopid = key
+    stock_soldstock_dict = value
   stock_info = {}
   soldstock_info = {}
-  stock_list = stock_soldstock_dict['Stock']
-  soldstock_list = stock_soldstock_dict['SoldStock']
+  
+  for key, value in stock_soldstock_dict.items():
+    if key == 'Stock':
+      key_stock = key
+      stock_list = value
+    elif key == 'SoldStock':
+      key_soldstock = key
+      soldstock_list = value
+    
+
+  #stock_list = stock_soldstock_dict['Stock']
+  #soldstock_list = stock_soldstock_dict['SoldStock']
 
   stock_form = StockForm()
   soldstock_form = SoldStockForm()
   logicObject = Logic.Logic()
- 
+
+  keys_stock_list = list(sorted(stock_list[0].viewkeys()))
+  keys_soldstock_list = list(sorted(soldstock_list[0].viewkeys()))
+  #print keys_stock_list
+  #print keys_soldstock_list
   for i in range(len(stock_list)):
     stock_info = literal_eval(json.dumps(stock_list[i]))
-    stock_form.barcode.data = stock_info['Barcode']
-    stock_form.shopId.data = stock_info['ShopId']
-    stock_form.stockQty.data = stock_info['Stock']
+    stock_form.barcode.data = stock_info[keys_stock_list[0]]
+    stock_form.shopId.data = shopid
+    stock_form.stockQty.data = stock_info[keys_stock_list[1]]
     feedback = logicObject.execute('addstock',stock_form)
+    #print feedback.getinfo()
+    #print stock_info['ShopId']
     #if feedback.getcommandtype() == "AddStock":
       #print "entering"
     #  feedback = logicObject.execute('updatestock',stock_form)
   
-  print soldstock_list
-  print len(soldstock_list)
+  #print soldstock_list
+  #print len(soldstock_list)
   for j in range(len(soldstock_list)):
     soldstock_info = literal_eval(json.dumps(soldstock_list[j]))
-    soldstock_form.barcode.data = soldstock_info['Barcode']
-    soldstock_form.priceSold.data = soldstock_info['priceSold']
-    soldstock_form.unitSold.data = soldstock_info['unitSold']
-    soldstock_form.shopId.data = soldstock_info['ShopId']
+    soldstock_form.barcode.data = soldstock_info[keys_soldstock_list[0]]
+    soldstock_form.priceSold.data = soldstock_info[keys_soldstock_list[1]]
+    soldstock_form.unitSold.data = soldstock_info[keys_soldstock_list[2]]
+    soldstock_form.shopId.data = shopid
     soldstock_form.timeStamps.data = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
     #print soldstock_form.timeStamps.data
     feedback = logicObject.execute('addsoldstock',soldstock_form)
-    print feedback.getinfo()
-    print feedback.getdata()
-    print feedback.getcommandtype()
+    #print feedback.getinfo()
+    #print feedback.getdata()
+    #print feedback.getcommandtype()
+  tmp_stock_soldstock = {}
 
-
-  return str(stock_soldstock)
+  return str("stock_soldstock")
 
 @app.route('/download', methods = ['GET'])
 def allow_download():
@@ -549,14 +576,22 @@ def allow_download():
 def get_stock():
   form = BuyItem()
   indata = request.data
-  dict_bar_quantity = json.loads(indata)
-  form.barcode.data = dict_bar_quantity['barcode']
-  form.quantity.data = dict_bar_quantity['quantity']
-  #print form.barcode.data, form.quantity.data
+  getstock = json.loads(indata)
   logicObject = Logic.Logic()
-  res = logicObject.execute('cachestockqty', form)
-  quan_dict = {'quantity':res}
-  return jsonify(quan_dict)
+  for key,value in getstock.items():
+    list_bar_quantity = value
+
+  to_sendlist = []
+  for bar_quantity in list_bar_quantity:
+    form.barcode.data = bar_quantity['barcode']
+    form.quantity.data = bar_quantity['quantity']
+    res = logicObject.execute('cachestockqty', form)
+    bar_quan_dict = {'barcode':bar_quantity['barcode'],'quantity':res}
+    to_sendlist.append(bar_quan_dict)
+
+  print to_sendlist
+  final_data = {'getstockdata':to_sendlist}
+  return jsonify(final_data)
 
 
 
@@ -572,8 +607,8 @@ def change_price(operation):
     all_bar_price = logicObject.execute(operation, None)
     #newprice = feedback.getdata()
     #print newprice
-    return str(all_bar_price)
-    #return render_template('changeprice.html', alldata = all_bar_price)
+    #return str(all_bar_price)
+    return render_template('changeprice.html', alldata = all_bar_price)
 
     #elif request.method == 'GET':
     # return render_template('changeprice.html', form = form)

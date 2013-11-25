@@ -2,7 +2,7 @@
  
 {% block content %}
 
-<table class="table">
+<table class="table table-hover table-bordered">
 <thead>
 	<tr>
 		<th> Barcode </th>
@@ -10,11 +10,15 @@
 	</tr>
 </thead>
 <tbody>
-{% for alldict in all_bar_price %}
+{% for alldict in alldata %}
 <tr>
-{% for key in alldict %}
-<td>{{ key }} </td>
-<td>{{ alldict[key] }} </td>
+{% for key,value in alldict.items() %}
+{% if key == "barcode" %}
+<td>{{ value }} </td>
+{% endif %}
+{% if key == "newprice" %}
+<td>{{ value }} </td>
+{% endif %}
 {% endfor %}
 </tr>
 {% endfor %}
