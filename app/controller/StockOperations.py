@@ -14,7 +14,7 @@ class AddStock(Command):
         if self.check_existing_item(formData):
             self.feedbackObject.setinfo("Failed :Duplicate Data present cannot be added")
             self.feedbackObject.setdata(formData.barcode.data)
-            self.feedbackObject.setcommandtype("AddStock")
+            self.feedbackObject.setcommandtype("FAddStock")
      
         else:
             self.storageObject.addStockToDatabase(formData)
