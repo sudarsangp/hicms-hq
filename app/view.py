@@ -536,7 +536,7 @@ def server_info():
     #print feedback.getinfo()
     #print stock_info['ShopId']
     if feedback.getcommandtype() == "AddStock":
-      print "entering"
+      #print "entering"
       feedback = logicObject.execute('updatestock',stock_form)
   
   #print soldstock_list
