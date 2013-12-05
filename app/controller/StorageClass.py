@@ -8,6 +8,7 @@
 from app.model.models import db, Customer,Shops, Location, Manufacturers,Category,Products, Stock, SoldStock
 from flask import session
 from Feedback import Feedback
+from ast import literal_eval
 
 fname = 'newitems.txt'
 
@@ -324,17 +325,63 @@ class StorageClass(object):
             newPrice = int(newPrice*100)/100.0
             return newPrice
 
-    def all_barcode_acitve_price(self):
+    def all_barcode_acitve_price(self, shopidin):
         bar_price = []
-        for oneprod in Products.query.all():
-            newprice = self.priceCalculator(oneprod.barcode)
-            dict_bar_price = {'barcode':oneprod.barcode,'newprice':newprice}
-            bar_price.append(dict_bar_price)
+        newfilename = 'changestock.txt'
+        try:
+            with open(newfilename):
+                f = open(newfilename,"r")
+                contentdata = f.read()
+                list_content = contentdata.split(';')
+                del list_content[0]
+                
+                for eachvalue in list_content:
+                    
+                    stockvalue = literal_eval(eachvalue)
+                    
+                    stockcontent = stockvalue['updatestock']
+                    barcodevalue = stockcontent['barcode']
+                    shopidvalue = stockcontent['shopid']
+                    newprice = self.active_price_calculator(barcodevalue,shopidvalue)
+                    dict_bar_price = {'barcode':barcodevalue,'newprice':newprice}
+                    bar_price.append(dict_bar_price)
+                #open(newfilename, 'w').close()
+        except IOError:
+          no_file = {'update':'No file'}  
+        #for oneprod in Products.query.all():
+            #newprice = self.active_price_calculator(oneprod.barcode,1) # change this to shopid and do for unique product
+            #dict_bar_price = {'barcode':oneprod.barcode,'newprice':newprice}
+            #bar_price.append(dict_bar_price)
         return bar_price
 
     def update_stock(self, formData):
         existingStock = Stock.query.filter_by(barcode = formData.barcode.data , shopId = formData.shopId.data).first()
+        if existingStock.stockQty != int(formData.stockQty.data):
+            fObject = open('changestock.txt', 'a')
+            prodall = {}
+            textprod = {}
+            textprod['barcode'] = formData.barcode.data
+            textprod['shopid'] = formData.shopId.data
+            textprod['stockqty'] = formData.stockQty.data
+            prodall['updatestock'] = textprod
+            fObject.write(";")
+            fObject.write(str(prodall))
+            fObject.close()
         existingStock.stockQty = formData.stockQty.data
         db.session.commit()
 
-
+    def active_price_calculator(self, enteredBarcode, shopidin):
+        productDetail = Products.query.filter_by(barcode = enteredBarcode).first()
+        costprice = productDetail.price
+        minStockQty = productDetail.minStock
+        stockDetail = Stock.query.filter_by(barcode = enteredBarcode).filter_by(shopId = shopidin).first()
+        currentStock = stockDetail.stockQty
+        numerator = 50 + (1.093 ** costprice)
+        denominator = currentStock - (0.9*minStockQty)
+        active_price = costprice + (numerator/denominator)
+        active_price = 0.05*round(active_price/0.05)
+        active_price = int(active_price*100)/100.0
+        stockDetail.lastActivePrice = active_price
+        print active_price, enteredBarcode
+        db.session.commit()
+        return active_price

@@ -3,10 +3,11 @@ from flask.ext.login import login_required
 from app import app, login_manager
 
 from form.forms import RegisterShopForm, SignupForm, SigninForm, ShopAdminFunction, AddCustomer ,AddManufacturer , AddStock, AddCategory, AddProduct, BuyItem
-from form.forms import SearchBarcode, LocationShopForm, HQAdminFunction, RetrieveShop, UpdateShopForm, UpdateProductForm, StockForm, SoldStockForm, SearchShopId, PriceCalculator
+from form.forms import SearchBarcode, LocationShopForm, HQAdminFunction, RetrieveShop, UpdateShopForm, UpdateProductForm, StockForm, SoldStockForm, SearchShopId, PriceCalculator, SettingsForm
 
 from model.models import Check, User, db, Customer
 from controller import Logic
+from controller.StorageClass import StorageClass
 
 import requests, json, time, datetime
 from ast import literal_eval
@@ -14,6 +15,9 @@ from operator import itemgetter
 
 @app.route('/check')
 def default():
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
   return render_template("baselayout.html")
 
 
@@ -23,20 +27,20 @@ def signup():
   form = SignupForm()
 
   if 'email' in session:
-  	return redirect(url_for('profile')) 
+    return redirect(url_for('profile')) 
 
   if request.method == 'POST':
     if form.validate() == False:
-    	return render_template('signup.html', form=form)
+      return render_template('signup.html', form=form)
     else:
-    	newuser = User(form.firstname.data, form.lastname.data, form.email.data, form.password.data)
-      	db.session.add(newuser)
-      	db.session.commit()
-      	session['email'] = newuser.email
-     	return redirect(url_for('profile'))
+      newuser = User(form.firstname.data, form.lastname.data, form.email.data, form.password.data)
+      db.session.add(newuser)
+      db.session.commit()
+      session['email'] = newuser.email
+      return redirect(url_for('profile'))
    
   elif request.method == 'GET':
-  	return render_template('signup.html', form=form)
+    return render_template('signup.html', form=form)
 
 @app.route('/')
 @app.route('/signin', methods=['GET', 'POST'])
@@ -85,6 +89,9 @@ def profile():
 
 @app.route('/hq', methods = ['POST', 'GET'])
 def hq_functions():
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
   form = HQAdminFunction()
   if request.method == "POST":
     operation = form.operations.data
@@ -145,6 +152,9 @@ def hq_functions():
 
 @app.route('/stockgroupedbyshop/<operation>', methods = ['GET', 'POST'])
 def stock_grouped_by_shop(operation):
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
   form = SearchShopId()
   if request.method == "POST":
     logicObject = Logic.Logic()
@@ -156,12 +166,18 @@ def stock_grouped_by_shop(operation):
 
 @app.route('/stockdisplayall/<operation>')
 def view_stock(operation):
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
   logicObject = Logic.Logic()
   allstocks = logicObject.execute(operation, None)
   return render_template('listingstocks.html', allstocks = allstocks)
 
 @app.route('/transactiongroupedbyshop/<operation>', methods = ['GET', 'POST'])
 def transaction_grouped_by_shop(operation):
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
   form = SearchShopId()
   if request.method == "POST":
     logicObject = Logic.Logic()
@@ -173,12 +189,18 @@ def transaction_grouped_by_shop(operation):
 
 @app.route('/transactiondisplayall/<operation>')
 def view_all_transaction(operation):
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
   logicObject = Logic.Logic()
   alltransactions = logicObject.execute(operation, None)
   return render_template('listingtransactions.html', alltransactions = alltransactions)
 
 @app.route('/deleteproduct/<operation>', methods = ['POST', 'GET'])
 def delete_product(operation):
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
   form = SearchBarcode()
   if request.method == "POST":
     logicObject = Logic.Logic()
@@ -190,6 +212,9 @@ def delete_product(operation):
 
 @app.route('/updateproduct/<operation>', methods = ['POST', 'GET'])
 def update_product(operation):
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
   form = SearchBarcode()
   if request.method == "POST":
     formbarcode = form.barcode.data
@@ -200,6 +225,9 @@ def update_product(operation):
 
 @app.route('/toupdateproduct/<formbarcode>', methods = ['POST', 'GET'])
 def actual_updateproduct(formbarcode):
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
   updateproductinfo = UpdateProductForm()
   logicObject = Logic.Logic()
   if request.method == "POST":
@@ -228,10 +256,16 @@ def actual_updateproduct(formbarcode):
       
 @app.route('/retrieveproduct/<operation>', methods = ['POST', 'GET'])
 def retrieve_product(operation):
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
   return redirect(url_for('search_barcode', operation = operation))
 
 @app.route('/deleteshop/<operation>', methods = ['POST', 'GET'])
 def delete_shop(operation):
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
   form = RetrieveShop()
   if request.method == "POST":
     logicObject = Logic.Logic()
@@ -243,6 +277,9 @@ def delete_shop(operation):
 
 @app.route('/updateshop/<operation>', methods = ['POST','GET'])
 def update_shop(operation):
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
   form = RetrieveShop()
   if request.method == "POST":
     
@@ -254,6 +291,9 @@ def update_shop(operation):
 
 @app.route('/tocheckupdate/<formshopid>', methods = ['POST', 'GET'])
 def check_update(formshopid):
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
   updateshopinfo = UpdateShopForm()
   logicObject = Logic.Logic()
   if request.method == "POST":
@@ -279,6 +319,9 @@ def check_update(formshopid):
 
 @app.route('/retrieveshop/<operation>', methods = ['POST','GET'])
 def retrieve_shop(operation):
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
   form = RetrieveShop()
   if request.method == "POST":
     logicObject = Logic.Logic()
@@ -293,12 +336,18 @@ def retrieve_shop(operation):
   
 @app.route('/displayshops/<operation>')
 def view_all_shops(operation):
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
   logicObject = Logic.Logic()
   allshops = logicObject.execute(operation, None)
   return render_template('listingshops.html', allshops = allshops)
 
 @app.route('/location/<operation>', methods = ['POST', 'GET'])
 def enterlocation(operation):
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
   form = LocationShopForm()
   if request.method == "POST":
     
@@ -311,6 +360,9 @@ def enterlocation(operation):
 
 @app.route('/shop/<operation>', methods = ['POST', 'GET'])
 def addshop(operation):
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
   logicObject = Logic.Logic()
   locationsall = logicObject.execute('viewlocation',None)
   loc_city_country = [(locationobj.city, locationobj.country) for locationobj in locationsall]
@@ -348,6 +400,9 @@ def addshop(operation):
 
 @app.route('/productsearch/<operation>', methods = ['POST','GET'])
 def search_barcode(operation):
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
   form = SearchBarcode()
   if request.method == "POST":
     logicObject = Logic.Logic()
@@ -362,6 +417,9 @@ def search_barcode(operation):
 
 @app.route('/productdisplayall/<operation>')
 def view_all_products(operation):
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
   logicObject = Logic.Logic()
   allproducts = logicObject.execute(operation, None)
   return render_template('listinginventory.html', allproducts = allproducts)
@@ -369,7 +427,9 @@ def view_all_products(operation):
 @app.route('/customer/<operation>', methods = ['POST', 'GET'])
 #@login_required
 def addcustomer(operation):
- 
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
   form = AddCustomer()
   msg = ""
   if request.method ==  "POST" :
@@ -392,71 +452,78 @@ def addcustomer(operation):
 @app.route('/manufacturer/<operation>', methods = ['POST', 'GET'])
 #@login_required    
 def addmanufacturer(operation):
-	
-	form = AddManufacturer()
-	if request.method == "POST":
-	
-		logicObject = Logic.Logic()
-		feedback = logicObject.execute(operation,form)
-		return render_template('feedback.html',feedback = feedback)
-	
-	elif request.method == 'GET':
-		return render_template('addmanufacturer.html', form = form)	
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+  form = AddManufacturer()
+  if request.method == "POST":
+  
+    logicObject = Logic.Logic()
+    feedback = logicObject.execute(operation,form)
+    return render_template('feedback.html',feedback = feedback)
+  
+  elif request.method == 'GET':
+    return render_template('addmanufacturer.html', form = form) 
 
 @app.route('/category/<operation>', methods = ['POST', 'GET'])
 #@login_required
 def addcategory(operation):
-	
-	form = AddCategory()
-	if request.method == "POST":
-	
-		logicObject = Logic.Logic()
-		feedback = logicObject.execute(operation,form)
-		return render_template('feedback.html',feedback = feedback)
-	
-	elif request.method == 'GET':
-		return render_template('addcategory.html', form = form)	
-	
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
+  form = AddCategory()
+  if request.method == "POST":
+  
+    logicObject = Logic.Logic()
+    feedback = logicObject.execute(operation,form)
+    return render_template('feedback.html',feedback = feedback)
+  
+  elif request.method == 'GET':
+    return render_template('addcategory.html', form = form) 
+  
 @app.route('/productadd/<operation>', methods = ['POST', 'GET'])
 #@login_required    
 def addproduct(operation):
-	
-	logicObject = Logic.Logic()
-	manufacturers = logicObject.execute('viewmanufacturers',None)
-	manufacturer_choices = [(manufacturer.manufacturerId,manufacturer.name) for manufacturer in manufacturers]
-	manufacturer_choices.append(('-1','None'))
-	categories = logicObject.execute('viewcategories',None)
-	category_choices =[(category.categoryId,category.categoryDescription) for category in categories]
-	category_choices.append(('-1','None'))
-	
-	form = AddProduct()	
-	form.manufacturerId.choices = manufacturer_choices
-	form.category.choices = category_choices
-	if request.method == "POST":
-		if(form.manufacturerId.data == '-1'):
-			form.manufacturerId.data = form.manufacturerForm.manufacturerId.data
-			feedback = logicObject.execute('addmanufacturer',form.manufacturerForm)
-			if(feedback.getinfo() != "Success: data added "):
-				return render_template('feedback.html',feedback = feedback)
-		
-		if(form.category.data == '-1'):
-			form.category.data = form.categoryForm.categoryId.data	
-			feedback = logicObject.execute('addcategory',form.categoryForm)
-			if(feedback.getinfo() != "Success: data added "):
-				return render_template('feedback.html',feedback = feedback)	
-		
-		
-		feedback = logicObject.execute(operation,form)
-		
-		return render_template('feedback.html',feedback = feedback)
-	
-	elif request.method == 'GET':
-		return render_template('addproduct.html', form = form)
-	
-	
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
+  logicObject = Logic.Logic()
+  manufacturers = logicObject.execute('viewmanufacturers',None)
+  manufacturer_choices = [(manufacturer.manufacturerId,manufacturer.name) for manufacturer in manufacturers]
+  manufacturer_choices.append(('-1','None'))
+  categories = logicObject.execute('viewcategories',None)
+  category_choices =[(category.categoryId,category.categoryDescription) for category in categories]
+  category_choices.append(('-1','None'))
+  
+  form = AddProduct() 
+  form.manufacturerId.choices = manufacturer_choices
+  form.category.choices = category_choices
+  if request.method == "POST":
+    if(form.manufacturerId.data == '-1'):
+      form.manufacturerId.data = form.manufacturerForm.manufacturerId.data
+      feedback = logicObject.execute('addmanufacturer',form.manufacturerForm)
+      if(feedback.getinfo() != "Success: data added "):
+        return render_template('feedback.html',feedback = feedback)
+    
+    if(form.category.data == '-1'):
+      form.category.data = form.categoryForm.categoryId.data  
+      feedback = logicObject.execute('addcategory',form.categoryForm)
+      if(feedback.getinfo() != "Success: data added "):
+        return render_template('feedback.html',feedback = feedback) 
+    
+    
+    feedback = logicObject.execute(operation,form)
+    
+    return render_template('feedback.html',feedback = feedback)
+  
+  elif request.method == 'GET':
+    return render_template('addproduct.html', form = form)
+  
+  
 @app.route('/stockadd/<operation>', methods = ['POST', 'GET'])
 #@login_required
 def addstock(operation):
+  if 'email' not in session:
+    return redirect(url_for('signin'))
 
   logicObject = Logic.Logic()
   products = logicObject.execute('viewproducts', None)
@@ -475,6 +542,9 @@ def addstock(operation):
 
 @app.route('/user', methods = ['POST', 'GET'])
 def buyitem():
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
   form = BuyItem()
   if request.method == 'POST':
     logicObject = Logic.Logic()
@@ -486,13 +556,16 @@ def buyitem():
 
 @app.route('/defaulterror')
 def defaulterror():
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
   return "Data not present"
 
 #to check the database part works fine
 @app.route('/db')
 def db_check():
-	checkdb = Check()
-	return checkdb.check_id()
+  checkdb = Check()
+  return checkdb.check_id()
 
 
 #to check server information
@@ -523,8 +596,10 @@ def server_info():
   soldstock_form = SoldStockForm()
   logicObject = Logic.Logic()
 
-  keys_stock_list = list(sorted(stock_list[0].viewkeys()))
-  keys_soldstock_list = list(sorted(soldstock_list[0].viewkeys()))
+  if len(stock_list) > 0:
+    keys_stock_list = list(sorted(stock_list[0].viewkeys()))
+  if len(soldstock_list) > 0:
+    keys_soldstock_list = list(sorted(soldstock_list[0].viewkeys()))
   #print keys_stock_list
   #print keys_soldstock_list
   for i in range(len(stock_list)):
@@ -597,6 +672,8 @@ def get_stock():
 
 @app.route('/changeprice/<operation>', methods = ['GET', 'POST'])
 def change_price(operation):
+    #if 'email' not in session:
+    #  return redirect(url_for('signin'))
     #form = PriceCalculator()
     
     global all_bar_price
@@ -604,14 +681,28 @@ def change_price(operation):
     logicObject = Logic.Logic()
     #if request.method == 'POST':
     #barcode_cp = form.barcode.data
-    all_bar_price = logicObject.execute(operation, None)
+    global shopidvalue
+    form = SearchShopId()
+    form.shopId.data = shopidvalue
+    all_bar_price = logicObject.execute(operation, form)
     #newprice = feedback.getdata()
-    #print newprice
+    print all_bar_price[0]
     #return str(all_bar_price)
+
     return render_template('changeprice.html', alldata = all_bar_price)
 
     #elif request.method == 'GET':
     # return render_template('changeprice.html', form = form)
+def auto_change_price():
+    global all_bar_price
+    all_bar_price = []
+    logicObject = Logic.Logic()
+    #if request.method == 'POST':
+    #barcode_cp = form.barcode.data
+    all_bar_price = logicObject.execute("changeprice", None)
+    #newprice = feedback.getdata()
+    print all_bar_price[0]
+    return all_bar_price[0]
 
 @app.route('/getprice', methods = ['GET'])
 def get_price():
@@ -619,5 +710,45 @@ def get_price():
   #indata = request.data
   #dict_barcode = json.loads(indata)
   #inbarcode = dict_barcode['barcode']
+  #{'barcode':barcodevalue,'newprice':newprice}
+
+  storageObject = StorageClass()
+  indata = request.data
+  getshopid = json.loads(indata)
+  global shopidvalue
+  shopidvalue = getshopid['shopid']
   price_bar = {'barcodeprice':all_bar_price}
   return jsonify(price_bar)
+
+@app.route('/settings', methods = ['GET', 'POST'])
+def settings():
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
+  form = SettingsForm()
+  if request.method == 'POST':
+    fname = "activepricefrequncy.txt"
+    f = open(fname,'w')
+    dataforfile = {}
+    starttimeforfile = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+    starttimedelta = datetime.datetime.strptime(starttimeforfile,'%Y-%m-%d %H:%M:%S' )
+    endtimedelta = starttimedelta + datetime.timedelta(minutes = int(form.pricefreq.data))
+    endtimeforfile = endtimedelta.strftime('%Y-%m-%d %H:%M:%S')
+    dataforfile = {}
+    f.write(';')
+    dataforfile['activepricefreq'] = form.pricefreq.data
+    f.write(str(dataforfile))
+    dataforfile = {}
+    f.write(';')
+    dataforfile['starttime'] = starttimeforfile
+    f.write(str(dataforfile))
+    dataforfile = {}
+    f.write(';')
+    dataforfile['endtime'] = endtimeforfile
+    f.write(str(dataforfile))
+    f.close()
+    datasent = "wriiten to file"
+    return render_template('settingsfeedback.html',data = datasent)
+
+  elif request.method == "GET":
+    return render_template('settings.html', form = form)

@@ -63,11 +63,13 @@ class Stock(db.Model):
   barcode = db.Column(db.String(256), primary_key = True)
   shopId = db.Column(db.String(256), primary_key = True)
   stockQty = db.Column(db.Integer)
-  
+  lastActivePrice = db.Column(db.Float, nullable = False)
+
   def __init__(self, barcode, shopId, stockQty):
     self.barcode = barcode
     self.shopId = shopId
     self.stockQty = stockQty
+    self.lastActivePrice = 0
 
 class SoldStock(db.Model):
 
@@ -124,6 +126,7 @@ class Products(db.Model):
     cacheStockQty = db.Column(db.Integer,nullable = False)
     bundleUnit = db.Column(db.Integer,nullable = False)
     
+
     def __init__(self,barcode,name,manufacturerId,category,price,minStock,cacheStockQty,bundleUnit):
        self.barcode = barcode 
        self.name = name
@@ -133,6 +136,7 @@ class Products(db.Model):
        self.minStock = minStock
        self.cacheStockQty = cacheStockQty
        self.bundleUnit = bundleUnit
+       
        
 class User(db.Model):
   __tablename__ = 'users'

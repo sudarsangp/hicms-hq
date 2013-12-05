@@ -181,6 +181,12 @@ class PriceCalculator(Form):
   def __init__(self, *args, **kwargs):
     Form.__init__(self,*args,**kwargs)
 
+class SettingsForm(Form):
+  pricefreq = TextField('pricefreq')
+  
+  def __init__(self, *args, **kwargs): # needed for importing in view.py
+      Form.__init__(self, *args, **kwargs)
+
 ################################################################################################################################################
 class SignupForm(Form):
   firstname = TextField("First name",  [validators.Required("Please enter your first name.")])
