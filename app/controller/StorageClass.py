@@ -9,6 +9,7 @@ from app.model.models import db, Customer,Shops, Location, Manufacturers,Categor
 from flask import session
 from Feedback import Feedback
 from ast import literal_eval
+import os
 
 fname = 'newitems.txt'
 
@@ -292,7 +293,7 @@ class StorageClass(object):
         stockbyshopid = Stock.query.filter_by(shopId = enteredShopId).all()
         return stockbyshopid
 
-    def priceCalculator(self,enteredBarcode):
+    """def priceCalculator(self,enteredBarcode):
         totalCurrentStock = 0;
         temptotalCurrentStock = Stock.query.filter(Stock.barcode == enteredBarcode).all()
         for row in temptotalCurrentStock :
@@ -323,11 +324,16 @@ class StorageClass(object):
             #print newPrice
             newPrice = 0.05*round(newPrice/0.05)
             newPrice = int(newPrice*100)/100.0
-            return newPrice
+            return newPrice"""
 
     def all_barcode_acitve_price(self, shopidin):
         bar_price = []
         newfilename = 'changestock.txt'
+        if os.stat(newfilename)[6] == 0:
+            bar_price_dict = {'barcode':'None','newprice':'no price'}
+            bar_price.append(bar_price_dict)
+            #print bar_price
+            return bar_price
         try:
             with open(newfilename):
                 f = open(newfilename,"r")
@@ -347,7 +353,7 @@ class StorageClass(object):
                     bar_price.append(dict_bar_price)
                 #open(newfilename, 'w').close()
         except IOError:
-          no_file = {'update':'No file'}  
+          bar_price = {'update':'No file'}  
         #for oneprod in Products.query.all():
             #newprice = self.active_price_calculator(oneprod.barcode,1) # change this to shopid and do for unique product
             #dict_bar_price = {'barcode':oneprod.barcode,'newprice':newprice}

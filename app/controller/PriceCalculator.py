@@ -9,7 +9,8 @@ class PriceCalculator(Command):
 		self.feedbackObject = Feedback()
 
 	def execute(self,formData):
-		list_bar_price = self.storageObject.all_barcode_acitve_price()
+		#print "inside PriceCalculator"
+		list_bar_price = self.storageObject.all_barcode_acitve_price(formData.shopId.data)
 		#self.feedbackObject = feedback
 		return list_bar_price
 

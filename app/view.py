@@ -674,35 +674,27 @@ def get_stock():
 def change_price(operation):
     #if 'email' not in session:
     #  return redirect(url_for('signin'))
-    #form = PriceCalculator()
-    
-    global all_bar_price
-    all_bar_price = []
-    logicObject = Logic.Logic()
-    #if request.method == 'POST':
-    #barcode_cp = form.barcode.data
-    global shopidvalue
-    form = SearchShopId()
-    form.shopId.data = shopidvalue
-    all_bar_price = logicObject.execute(operation, form)
-    #newprice = feedback.getdata()
-    print all_bar_price[0]
-    #return str(all_bar_price)
-
-    return render_template('changeprice.html', alldata = all_bar_price)
-
+    form = SearchShopId()  
+    if request.method == 'POST': 
+      logicObject = Logic.Logic()
+      #if request.method == 'POST':
+      #barcode_cp = form.barcode.data
+      all_shops = logicObject.execute(operation, form)
+      return render_template('changeprice.html', alldata = all_shops)
+    elif request.method == 'GET':
+      return render_template('searchshopid.html',form = form)
     #elif request.method == 'GET':
     # return render_template('changeprice.html', form = form)
-def auto_change_price():
-    global all_bar_price
-    all_bar_price = []
-    logicObject = Logic.Logic()
-    #if request.method == 'POST':
-    #barcode_cp = form.barcode.data
-    all_bar_price = logicObject.execute("changeprice", None)
-    #newprice = feedback.getdata()
-    print all_bar_price[0]
-    return all_bar_price[0]
+#def auto_change_price():
+#    global all_bar_price
+#    all_bar_price = []
+#    logicObject = Logic.Logic()
+#    #if request.method == 'POST':
+#   #barcode_cp = form.barcode.data
+#    all_bar_price = logicObject.execute("changeprice", None)
+#    #newprice = feedback.getdata()
+#    print all_bar_price[0]
+#    return all_bar_price[0]
 
 @app.route('/getprice', methods = ['GET'])
 def get_price():
@@ -715,9 +707,12 @@ def get_price():
   storageObject = StorageClass()
   indata = request.data
   getshopid = json.loads(indata)
-  global shopidvalue
-  shopidvalue = getshopid['shopid']
-  price_bar = {'barcodeprice':all_bar_price}
+  form = SearchShopId()
+  logicObject = Logic.Logic()
+  form.shopId.data = getshopid['shopid']
+  change_bar_price = logicObject.execute("changeprice", form)
+  #shopidvalue = getshopid['shopid']
+  price_bar = {'barcodeprice':change_bar_price}
   return jsonify(price_bar)
 
 @app.route('/settings', methods = ['GET', 'POST'])
