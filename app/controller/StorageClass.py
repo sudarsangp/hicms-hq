@@ -43,7 +43,7 @@ class StorageClass(object):
  
     def addManufacturerToDatabase(self,formData):
       #  newManufacturerData = Manufacturers(formData.manufacturerId.data, formData.name.data, formData.isContractValid.data) 
-        newManufacturerData = Manufacturers(formData.manufacturerId.data, formData.mname.data, True) 
+        newManufacturerData = Manufacturers(formData.manufacturerId.data, formData.mname.data, False) 
         #isManufacturerIdPresent
         
         db.session.add(newManufacturerData) 
@@ -76,7 +76,7 @@ class StorageClass(object):
             return True
     
     def addCategoryToDatabase(self,formData):
-        newManufacturerData = Category(formData.categoryId.data, formData.categoryDescription.data,formData.isExpirable.data)
+        newManufacturerData = Category(formData.categoryId.data, formData.categoryDescription.data,0)#hard code here
         
         db.session.add(newManufacturerData) 
         db.session.commit()    
