@@ -1,15 +1,33 @@
 {% extends "baselayout.html" %}
  
 {% block content %}
-
-<form action = "" method = post id = 1>
-	Enter Manufacturer Id
-	{{ form.manufacturerId }} <br>
-	Enter Manufacturer Name
-	{{ form.mname }} <br>
-	Enter is Contract Valid
-	{{ form.isContractValid}} <br>
-	
-		<input type="submit" value="Add Manufacturer">
+<form action = "" method = "post" role = "form" class="form">
+	<div class="row">
+	<div class = "form-group col-lg-3">	
+		<label class="control-label">Enter Manufacturer Id</label>
+		<div {% if form.manufacturerId.errors %} class = "has-error" {% else %} class="" {% endif %} >
+			{{ form.manufacturerId(class="form-control") }} 
+		</div>
+	</div>
+	</div>
+	<div class="row">
+	<div class = "form-group col-lg-3">	
+		<label class="control-label">Enter Manufacturer Name</label>
+		<div {% if form.mname.errors %} class = "has-error" {% else %} class="" {% endif %} >
+			{{ form.mname(class="form-control") }} 
+		</div>
+	</div>
+	</div>
+	<div class="row">
+	<div class = "form-group col-lg-3">	
+		<label class="control-label">Enter is Contract Valid</label>
+		<div {% if form.isContractValid.errors %} class = "has-error" {% else %} class="" {% endif %} >
+			{{ form.isContractValid(class="form-control") }} 
+		</div>
+	</div>
+	</div>
+	<div class="form-group">
+		<input type="submit" value="Add Manufacturer" class="btn btn-success">
+	</div>
 </form>
 {% endblock %}

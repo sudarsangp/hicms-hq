@@ -145,8 +145,11 @@ def hq_functions():
       return redirect(url_for('change_price', operation = operation))
 
     elif operation == "addcategory":
-      return redirect(url_for('category_add', operation = operation))
-      
+      return redirect(url_for('addcategory', operation = operation))
+
+    elif operation == "addmanufacturer":
+      return redirect(url_for('addmanufacturer', operation = operation))
+
     else:
       #print operation
       return "Mapping not yet implemented"
@@ -759,11 +762,3 @@ def settings():
   elif request.method == "GET":
     return render_template('settings.html', form = form)
 
-@app.route('/category/<operation>', methods = ['GET', 'POST'])
-def category_add(operation):
-  form = AddCategory()
-  if request.method == 'POST':
-    return "ok"
-
-  elif request.method == 'GET':
-    return render_template('addcategory.html', form = form)
