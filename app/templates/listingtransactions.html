@@ -13,7 +13,7 @@
 	</tr>
 </thead>
 <tbody>
-{% for transactionobj in alltransactions %}
+{% for transactionobj in alltransactions.items %}
 <tr>
 <td style="color:blue">{{ transactionobj.barcode }} </td>
 <td>{{ transactionobj.priceSold }}  </td>
@@ -23,6 +23,8 @@
 </tr>
 {% endfor %}
 </tbody>
+{% if alltransactions.has_prev %}<a href="{{ url_for('view_all_transaction', page = alltransactions.prev_num) }}"><< Previous Page</a>{% else %}<< Previous Page{% endif %} | 
+{% if alltransactions.has_next %}<a href="{{ url_for('view_all_transaction', page = alltransactions.next_num) }}">Next Page>></a>{% else %}Next Page >>{% endif %}
 </table>
-<script src="{{ url_for('static',filename='js/transactiondisplay.js') }}" type="text/javascript"></script>
+
 {% endblock %}

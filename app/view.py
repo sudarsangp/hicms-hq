@@ -13,6 +13,8 @@ import requests, json, time, datetime
 from ast import literal_eval
 from operator import itemgetter
 
+from config import POSTS_PER_PAGE
+
 @app.route('/check')
 def default():
   if 'email' not in session:
@@ -124,19 +126,19 @@ def hq_functions():
       return redirect(url_for('delete_product', operation = operation))
 
     elif operation == "viewproducts":
-      return redirect(url_for('view_all_products',operation = operation))
+      return redirect(url_for('view_all_products',page = 1))
 
     elif operation == "addlocation":
       return redirect(url_for('enterlocation', operation = operation))   
 
     elif operation == "viewtransactions":
-      return redirect(url_for('view_all_transaction', operation = operation))
+      return redirect(url_for('view_all_transaction', page = 1))
 
     elif operation == "transactiongroupedbyshop":
       return redirect(url_for('transaction_grouped_by_shop', operation = operation))
 
     elif operation == "viewstock":
-      return redirect(url_for('view_stock', operation = operation))
+      return redirect(url_for('view_stock', page = 1))
 
     elif operation == "stockgroupedbyshop":
       return redirect(url_for('stock_grouped_by_shop', operation = operation))
@@ -155,7 +157,7 @@ def hq_functions():
 
     elif operation == "viewmanufacturers":
       return redirect(url_for('view_manufacturer', operation = operation ))
-      
+
     else:
       #print operation
       return "Mapping not yet implemented"
@@ -176,13 +178,15 @@ def stock_grouped_by_shop(operation):
   elif request.method == 'GET':
     return render_template('searchshopid.html',form = form)
 
-@app.route('/stockdisplayall/<operation>')
-def view_stock(operation):
+@app.route('/stockdisplayall/<int:page>')
+def view_stock(page = 1):
   if 'email' not in session:
     return redirect(url_for('signin'))
 
   logicObject = Logic.Logic()
-  allstocks = logicObject.execute(operation, None)
+  storageObject = StorageClass()
+  #allstocks = logicObject.execute(operation, None)
+  allstocks = storageObject.get_paginate_stock(page,POSTS_PER_PAGE)
   return render_template('listingstocks.html', allstocks = allstocks)
 
 @app.route('/transactiongroupedbyshop/<operation>', methods = ['GET', 'POST'])
@@ -199,13 +203,15 @@ def transaction_grouped_by_shop(operation):
   elif request.method == 'GET':
     return render_template('searchshopid.html',form = form)
 
-@app.route('/transactiondisplayall/<operation>')
-def view_all_transaction(operation):
+@app.route('/transactiondisplayall/<int:page>')
+def view_all_transaction(page = 1):
   if 'email' not in session:
     return redirect(url_for('signin'))
 
   logicObject = Logic.Logic()
-  alltransactions = logicObject.execute(operation, None)
+  storageObject = StorageClass()
+  #alltransactions = logicObject.execute(operation, None)
+  alltransactions = storageObject.get_paginate_soldstock(page,POSTS_PER_PAGE)
   return render_template('listingtransactions.html', alltransactions = alltransactions)
 
 @app.route('/deleteproduct/<operation>', methods = ['POST', 'GET'])
@@ -427,13 +433,15 @@ def search_barcode(operation):
   elif request.method == 'GET':
     return render_template('searchbarcode.html',form = form)
 
-@app.route('/productdisplayall/<operation>')
-def view_all_products(operation):
+@app.route('/productdisplayall/<int:page>')
+def view_all_products(page = 1):
   if 'email' not in session:
     return redirect(url_for('signin'))
 
   logicObject = Logic.Logic()
-  allproducts = logicObject.execute(operation, None)
+  storageObject = StorageClass()
+  #allproducts = logicObject.execute(operation, None)
+  allproducts = storageObject.get_paginate_products(page,POSTS_PER_PAGE)
   return render_template('listinginventory.html', allproducts = allproducts)
 
 @app.route('/customer/<operation>', methods = ['POST', 'GET'])

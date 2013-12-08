@@ -183,6 +183,10 @@ class StorageClass(object):
         existingProduct = Products.query.all()
         return existingProduct
 
+    def get_paginate_products(self, page, ppp):
+        existingProduct = Products.query.paginate(page,ppp,False)
+        return existingProduct
+
     def get_stock_quantity_for_barcode(self, enteredBarcode):
         stockData = Stock.query.filter_by(barcode = enteredBarcode).first()
         return stockData.batchQty
@@ -270,6 +274,10 @@ class StorageClass(object):
         existingSoldStocks = SoldStock.query.all()
         return existingSoldStocks
 
+    def get_paginate_soldstock(self,page,ppp):
+        existingSoldStocks = SoldStock.query.paginate(page,ppp,False)
+        return existingSoldStocks
+
     def get_transaction_grouped_shopId(self, enteredShopId):
         transactionsbyshopid = SoldStock.query.filter_by(shopId = enteredShopId).all()
         return transactionsbyshopid
@@ -287,6 +295,10 @@ class StorageClass(object):
 
     def get_stock_from_db(self):
         existingStock = Stock.query.all()
+        return existingStock
+
+    def get_paginate_stock(self, page, ppp):
+        existingStock = Stock.query.paginate(page,ppp,False)
         return existingStock
 
     def get_stock_grouped_shopId(self, enteredShopId):

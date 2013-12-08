@@ -11,7 +11,7 @@
 	</tr>
 </thead>
 <tbody>
-{% for stockobj in allstocks %}
+{% for stockobj in allstocks.items %}
 <tr>
 <td style="color:blue">{{ stockobj.barcode }} </td>
 <td style="color:blue">{{ stockobj.shopId }} </td>
@@ -19,5 +19,7 @@
 </tr>
 {% endfor %}
 </tbody>
+{% if allstocks.has_prev %}<a href="{{ url_for('view_stock', page = allstocks.prev_num) }}"><< Previous Page</a>{% else %}<< Previous Page{% endif %} | 
+{% if allstocks.has_next %}<a href="{{ url_for('view_stock', page = allstocks.next_num) }}">Next Page>></a>{% else %}Next Page >>{% endif %}
 </table>
 {% endblock %}
