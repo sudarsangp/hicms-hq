@@ -143,7 +143,10 @@ def hq_functions():
 
     elif operation == "changeprice":
       return redirect(url_for('change_price', operation = operation))
- 
+
+    elif operation == "addcategory":
+      return redirect(url_for('category_add', operation = operation))
+      
     else:
       #print operation
       return "Mapping not yet implemented"
@@ -587,7 +590,15 @@ def server_info():
     elif key == 'SoldStock':
       key_soldstock = key
       soldstock_list = value
-    
+  
+  feedback_json = {}
+  if len(stock_list) == 0 and len(soldstock_list) == 0:
+    feedback_json['feedback'] = "stock and soldstock empty"
+    return jsonify(feedback_json)
+
+  if len(stock_list) == 0 and len(soldstock_list)>0:
+    feedback_json['feedback'] = "stock empty so soldstock not added"
+    return jsonify(feedback_json)
 
   #stock_list = stock_soldstock_dict['Stock']
   #soldstock_list = stock_soldstock_dict['SoldStock']
@@ -628,9 +639,9 @@ def server_info():
     #print feedback.getinfo()
     #print feedback.getdata()
     #print feedback.getcommandtype()
-  tmp_stock_soldstock = {}
+  feedback_json['feedback'] = "success data received"
 
-  return str("stock_soldstock")
+  return jsonify(feedback_json)
 
 @app.route('/download', methods = ['GET'])
 def allow_download():
@@ -747,3 +758,12 @@ def settings():
 
   elif request.method == "GET":
     return render_template('settings.html', form = form)
+
+@app.route('/category/<operation>', methods = ['GET', 'POST'])
+def category_add(operation):
+  form = AddCategory()
+  if request.method == 'POST':
+    return "ok"
+
+  elif request.method == 'GET':
+    return render_template('addcategory.html', form = form)
