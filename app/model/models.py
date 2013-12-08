@@ -98,7 +98,7 @@ class Category(db.Model):
     def __init__(self,categoryId,categoryDescription,isExpirable):
         self.categoryDescription = categoryDescription
         self.categoryId = categoryId
-        self.isExpirable = isExpirable    
+        self.isExpirable = 0    
 
 
 class Manufacturers(db.Model):    
@@ -112,7 +112,7 @@ class Manufacturers(db.Model):
   def __init__(self,manufacturerId,name,isContractValid):
        self.manufacturerId = manufacturerId 
        self.name = name
-       self.isContractValid = isContractValid 
+       self.isContractValid = 0
 
 class Products(db.Model):
     __tablename__= "products"  

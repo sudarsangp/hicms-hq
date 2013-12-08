@@ -60,7 +60,7 @@ class HQAdminFunction(Form):
   operations = RadioField('operations', choices = [('addshop','Create Shop'),('retrieveshop', 'Retrieve Shop'),('updateshop','Update Shop'),('deleteshop','Delete Shop'),('viewshops','List All Shops'),
     ('addproduct','Add Product'),('retrieveproduct','Retrieve Product'),('updateproduct', 'Update Product'),('deleteproduct', 'Delete Product'),('viewproducts','View All Products'),('changeprice','Active Pricing'),('viewstock','View Stock'),('stockgroupedbyshop','Stock By Shop'),
     ('viewtransactions','List All Transaction'),('transactiongroupedbyshop','Grouped by Shop'),
-    ('addlocation','Add Location'),('addcategory','Add Category'),('addmanufacturer','Add Manufacturer')])
+    ('addlocation','Add Location'),('addcategory','Add Category'),('addmanufacturer','Add Manufacturer'),('viewcategory','View Categories'),('viewmanufacturers','View Manufacturers')])
 
 """,('addcustomer','Add Customer'),('addstock', 'Add Stock'),
     ('editcustomer','Edit Customer'),
@@ -91,7 +91,7 @@ class AddCustomer(Form):
 class AddManufacturer(Form):
   manufacturerId = TextField('manufacturerId',validators = [validators.Required("Please enter manufacturer Id"), validateNotEmpty])
   mname = TextField('name',validators = [validators.Required("Please enter manufacturer Name"), validateNotEmpty])
-  isContractValid = TextField('isContractValid',validators = [validators.Required()])
+  #isContractValid = TextField('isContractValid',validators = [validators.Required()])
 	
   def __init__(self, *args, **kwargs):
     Form.__init__(self, *args, **kwargs)
@@ -99,7 +99,7 @@ class AddManufacturer(Form):
 class AddCategory(Form):
   categoryId = TextField('categoryId',validators = [validators.Required(), validateNotEmpty])
   categoryDescription = TextField('categoryDescription',validators = [validators.Required(), validateNotEmpty])
-  isExpirable = TextField('isExpirable',validators = [validators.Required()])
+  #isExpirable = TextField('isExpirable',validators = [validators.Required()])
 	
   def __init__(self, *args, **kwargs):
     Form.__init__(self, *args, **kwargs)  

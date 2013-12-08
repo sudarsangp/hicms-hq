@@ -1,0 +1,21 @@
+{% extends "baselayout.html" %}
+ 
+{% block content %}
+
+<table class="table table-hover table-bordered">
+<thead>
+	<tr>
+		<th> Category Id </th>
+		<th> Category Description </th>
+	</tr>
+</thead>
+<tbody>
+{% for eachcategory in categories %}
+<tr>
+<td style="color:blue">{{ eachcategory.categoryId }} </td>
+<td>{{ eachcategory.categoryDescription }}  </td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+{% endblock %}

@@ -150,6 +150,12 @@ def hq_functions():
     elif operation == "addmanufacturer":
       return redirect(url_for('addmanufacturer', operation = operation))
 
+    elif operation == "viewcategory":
+      return redirect(url_for('view_category', operation = operation ))
+
+    elif operation == "viewmanufacturers":
+      return redirect(url_for('view_manufacturer', operation = operation ))
+      
     else:
       #print operation
       return "Mapping not yet implemented"
@@ -762,3 +768,20 @@ def settings():
   elif request.method == "GET":
     return render_template('settings.html', form = form)
 
+@app.route('/viewcategory/<operation>', methods = ['GET', 'POST'])
+def view_category(operation):
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
+  logicObject = Logic.Logic()
+  categories = logicObject.execute('viewcategories',None)
+  return render_template('listcategory.html', categories = categories)
+
+@app.route('/viewmanufacturers/<operation>', methods = ['GET', 'POST'])
+def view_manufacturer(operation):
+  if 'email' not in session:
+    return redirect(url_for('signin'))
+
+  logicObject = Logic.Logic()
+  manufacturers = logicObject.execute('viewmanufacturers',None)
+  return render_template('listmanufacturer.html', manufacturers = manufacturers)

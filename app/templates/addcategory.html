@@ -18,15 +18,8 @@
 		</div>
 	</div>
 	</div>
-	<div class="row">
-	<div class = "form-group col-lg-3">	
-		<label class="control-label">Enter Is Expirable</label>
-		<div {% if form.isExpirable.errors %} class = "has-error" {% else %} class="" {% endif %} >
-			{{ form.isExpirable(class="form-control") }} 
-		</div>
-	</div>
-	</div>
 	<div class="form-group">
 		<input type="submit" value="Add Category" class="btn btn-success">
 	</div>
+</form>
 {% endblock %}
