@@ -282,6 +282,10 @@ class StorageClass(object):
         transactionsbyshopid = SoldStock.query.filter_by(shopId = enteredShopId).all()
         return transactionsbyshopid
 
+    def get_paginate_transaction_grouped_shopId(self, page, ppp, enteredShopId):
+        transactionsbyshopid = SoldStock.query.filter_by(shopId = enteredShopId).paginate(page,ppp,False)
+        return transactionsbyshopid
+
     def get_cachestockqty_from_product(self,formData):
         existingprod = Products.query.filter_by(barcode = formData.barcode.data).first()
         #print formData.quantity.data, type(formData.quantity.data)
@@ -303,6 +307,10 @@ class StorageClass(object):
 
     def get_stock_grouped_shopId(self, enteredShopId):
         stockbyshopid = Stock.query.filter_by(shopId = enteredShopId).all()
+        return stockbyshopid
+
+    def get_paginate_grouped_shopId(self, page, ppp, enteredShopId):
+        stockbyshopid = Stock.query.filter_by(shopId = enteredShopId).paginate(page,ppp,False)
         return stockbyshopid
 
     """def priceCalculator(self,enteredBarcode):

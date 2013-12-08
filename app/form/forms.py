@@ -11,6 +11,22 @@ class LocationShopForm(Form):
   def __init__(self, *args, **kwargs):
     Form.__init__(self, *args, **kwargs)
 
+  def validateNotEmpty(self,field):
+    s = field.data
+    s = s.replace(' ','')
+    if len(s) == 0:
+      return 'Cannot give empty space'
+  
+  def validateNumber(form,field):
+    s = field.data
+    if re.match("^\d+$",s) is None:
+      return 'please enter only numbers'
+
+  def validateFloat(form,field):
+    s = field.data
+    if re.match("^\d*.\d+$",s) is None:
+      return 'please enter valid price'
+
 import re
 
 def validateNotEmpty(form,field):
@@ -36,6 +52,17 @@ class RegisterShopForm(Form):
   def __init__(self, *args, **kwargs):
     Form.__init__(self, *args, **kwargs)
 
+  def validateNotEmpty(self,field):
+    s = field.data
+    s = s.replace(' ','')
+    if len(s) == 0:
+      return 'Cannot give empty space'
+  
+  def validateNumber(form,field):
+    s = field.data
+    if re.match("^\d+$",s) is None:
+      return 'please enter only numbers'
+
 class UpdateShopForm(Form):
   shopId = TextField('shopId', validators = [validators.Required()])
   city = TextField('city', validators = [validators.Required()])
@@ -47,11 +74,33 @@ class UpdateShopForm(Form):
   def __init__(self, *args, **kwargs):
       Form.__init__(self, *args, **kwargs)
 
+  def validateNotEmpty(self,field):
+    s = field.data
+    s = s.replace(' ','')
+    if len(s) == 0:
+      return 'Cannot give empty space'
+  
+  def validateNumber(form,field):
+    s = field.data
+    if re.match("^\d+$",s) is None:
+      return 'please enter only numbers'
+
 class RetrieveShop(Form):
   shopId = TextField('shopId')
 
   def __init__(self, *args, **kwargs):
     Form.__init__(self, *args, **kwargs)
+
+  def validateNotEmpty(self,field):
+    s = field.data
+    s = s.replace(' ','')
+    if len(s) == 0:
+      return 'Cannot give empty space'
+  
+  def validateNumber(form,field):
+    s = field.data
+    if re.match("^\d+$",s) is None:
+      return 'please enter only numbers'
 
 class ShopAdminFunction(Form):
   operations = RadioField('operations', choices = [('searchBarcode','Search Barcode'),('viewproducts','View Product')])
@@ -96,6 +145,17 @@ class AddManufacturer(Form):
   def __init__(self, *args, **kwargs):
     Form.__init__(self, *args, **kwargs)
 
+  def validateNotEmpty(self,field):
+    s = field.data
+    s = s.replace(' ','')
+    if len(s) == 0:
+      return 'Cannot give empty space'
+  
+  def validateNumber(form,field):
+    s = field.data
+    if re.match("^\d+$",s) is None:
+      return 'please enter only numbers'
+
 class AddCategory(Form):
   categoryId = TextField('categoryId',validators = [validators.Required(), validateNotEmpty])
   categoryDescription = TextField('categoryDescription',validators = [validators.Required(), validateNotEmpty])
@@ -103,7 +163,18 @@ class AddCategory(Form):
 	
   def __init__(self, *args, **kwargs):
     Form.__init__(self, *args, **kwargs)  
-    
+  
+  def validateNotEmpty(self,field):
+    s = field.data
+    s = s.replace(' ','')
+    if len(s) == 0:
+      return 'Cannot give empty space'
+  
+  def validateNumber(form,field):
+    s = field.data
+    if re.match("^\d+$",s) is None:
+      return 'please enter only numbers'
+
 class AddProduct(Form):
   barcode = TextField('barcode',validators = [validators.Required(), validateNotEmpty, validateNumber])
   proname = TextField('name',validators = [validators.Required(), validateNotEmpty])
@@ -118,6 +189,22 @@ class AddProduct(Form):
 	
   def __init__(self, *args, **kwargs):
     Form.__init__(self, *args, **kwargs)  
+
+  def validateNotEmpty(self,field):
+    s = field.data
+    s = s.replace(' ','')
+    if len(s) == 0:
+      return 'Cannot give empty space'
+
+  def validateNumber(form,field):
+    s = field.data
+    if re.match("^\d+$",s) is None:
+      return 'please enter only numbers'
+
+  def validateFloat(form,field):
+    s = field.data
+    if re.match("^\d*.\d+$",s) is None:
+      return 'please enter valid price'
 
 class UpdateProductForm(Form):
   barcode = TextField('barcode')
@@ -153,6 +240,17 @@ class SearchBarcode(Form):
   def __init__(self, *args, **kwargs):
     Form.__init__(self, *args, **kwargs)
 
+  def validateNotEmpty(self,field):
+    s = field.data
+    s = s.replace(' ','')
+    if len(s) == 0:
+      return 'Cannot give empty space'
+
+  def validateNumber(self,field):
+    s = field.data
+    if re.match("^\D+$",s):
+      return 'please enter only numbers'
+
 class StockForm(Form):
   barcode = TextField('barcode')
   shopId = TextField('shopId')
@@ -176,6 +274,17 @@ class SearchShopId(Form):
 
   def __init__(self, *args, **kwargs):
     Form.__init__(self, *args, **kwargs)
+
+  def validateNotEmpty(self,field):
+    s = field.data
+    s = s.replace(' ','')
+    if len(s) == 0:
+      return 'Cannot give empty space'
+  
+  def validateNumber(form,field):
+    s = field.data
+    if re.match("^\d+$",s) is None:
+      return 'please enter only numbers'
 
 class PriceCalculator(Form):
   barcode = TextField('Enter Barcode')

@@ -141,7 +141,7 @@ def hq_functions():
       return redirect(url_for('view_stock', page = 1))
 
     elif operation == "stockgroupedbyshop":
-      return redirect(url_for('stock_grouped_by_shop', operation = operation))
+      return redirect(url_for('stock_grouped_by_shop', page = 1))
 
     elif operation == "changeprice":
       return redirect(url_for('change_price', operation = operation))
@@ -160,19 +160,30 @@ def hq_functions():
 
     else:
       #print operation
-      return "Mapping not yet implemented"
+      return render_template('errorstatus.html', statusmessage =  " Select a button " , redirecturl = '/hq')
+
   elif request.method == "GET":
     return render_template('HQshop_related_operation.html', form = form)
 
-@app.route('/stockgroupedbyshop/<operation>', methods = ['GET', 'POST'])
-def stock_grouped_by_shop(operation):
+@app.route('/stockgroupedbyshop/<int:page>', methods = ['GET', 'POST'])
+def stock_grouped_by_shop(page = 1):
   if 'email' not in session:
     return redirect(url_for('signin'))
 
   form = SearchShopId()
   if request.method == "POST":
+
+    form_validation = form.validateNotEmpty(form.shopId)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for shopid" , redirecturl = '/stockgroupedbyshop/stockgroupedbyshop')
+    form_validation = form.validateNumber(form.shopId)
+    if str(form_validation) == 'please enter only numbers':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for shopid" , redirecturl = '/stockgroupedbyshop/stockgroupedbyshop')
+
     logicObject = Logic.Logic()
-    stockobjbyshop = logicObject.execute(operation,form)
+    storageObject = StorageClass()
+    #stockobjbyshop = logicObject.execute("stockgroupedbyshop",form)
+    stockobjbyshop = storageObject.get_paginate_grouped_shopId(page, POSTS_PER_PAGE, form.shopId.data)
     return render_template('listingstocks.html', allstocks = stockobjbyshop)
 
   elif request.method == 'GET':
@@ -196,8 +207,18 @@ def transaction_grouped_by_shop(operation):
 
   form = SearchShopId()
   if request.method == "POST":
+
+    form_validation = form.validateNotEmpty(form.shopId)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for shopid" , redirecturl = '/transactiongroupedbyshop/transactiongroupedbyshop')
+    form_validation = form.validateNumber(form.shopId)
+    if str(form_validation) == 'please enter only numbers':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for shopid" , redirecturl = '/transactiongroupedbyshop/transactiongroupedbyshop')
+
     logicObject = Logic.Logic()
+    #storageObject = StorageClass()
     transactionobjbyshop = logicObject.execute(operation,form)
+    #transactionobjbyshop = storageObject.get_paginate_transaction_grouped_shopId(page,POSTS_PER_PAGE,form.shopId.data)
     return render_template('transactionbyshopid.html', transactionobjbyshop = transactionobjbyshop)
 
   elif request.method == 'GET':
@@ -221,6 +242,14 @@ def delete_product(operation):
 
   form = SearchBarcode()
   if request.method == "POST":
+
+    form_validation = form.validateNotEmpty(form.barcode)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for barcode" , redirecturl = '/deleteproduct/deleteproduct')
+    form_validation = form.validateNumber(form.barcode)
+    if str(form_validation) == 'please enter only numbers':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for barcode" , redirecturl = '/deleteproduct/deleteproduct')
+
     logicObject = Logic.Logic()
     feedback = logicObject.execute(operation, form)
     return render_template('feedback.html', feedback = feedback)
@@ -235,6 +264,14 @@ def update_product(operation):
 
   form = SearchBarcode()
   if request.method == "POST":
+
+    form_validation = form.validateNotEmpty(form.barcode)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for barcode" , redirecturl = '/updateproduct/updateproduct')
+    form_validation = form.validateNumber(form.barcode)
+    if str(form_validation) == 'please enter only numbers':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for barcode" , redirecturl = '/updateproduct/updateproduct')
+
     formbarcode = form.barcode.data
     return redirect(url_for('actual_updateproduct', formbarcode = formbarcode))
 
@@ -249,6 +286,40 @@ def actual_updateproduct(formbarcode):
   updateproductinfo = UpdateProductForm()
   logicObject = Logic.Logic()
   if request.method == "POST":
+
+    form_validation = updateproductinfo.validateNotEmpty(updateproductinfo.barcode)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for barcode" , redirecturl = '/updateproduct/updateproduct')
+    form_validation = updateproductinfo.validateNumber(updateproductinfo.barcode)
+    if str(form_validation) == 'please enter only numbers':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for barcode" , redirecturl = '/updateproduct/updateproduct')
+
+    form_validation = updateproductinfo.validateNotEmpty(updateproductinfo.proname)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for name" , redirecturl = '/updateproduct/updateproduct')
+
+    form_validation = updateproductinfo.validateNotEmpty(updateproductinfo.price)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for price" , redirecturl = '/updateproduct/updateproduct')
+
+    form_validation = updateproductinfo.validateFloat(updateproductinfo.price)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for price" , redirecturl = '/updateproduct/updateproduct')
+
+    form_validation = updateproductinfo.validateNotEmpty(updateproductinfo.minStock)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for minStock" , redirecturl = '/updateproduct/updateproduct')
+    form_validation = updateproductinfo.validateNumber(updateproductinfo.minStock)
+    if str(form_validation) == 'please enter only numbers':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for minStock" , redirecturl = '/updateproduct/updateproduct')
+
+    form_validation = updateproductinfo.validateNotEmpty(updateproductinfo.bundleUnit)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for bundleUnit" , redirecturl = '/updateproduct/updateproduct')
+    form_validation = updateproductinfo.validateNumber(updateproductinfo.bundleUnit)
+    if str(form_validation) == 'please enter only numbers':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for bundleUnit" , redirecturl = '/updateproduct/updateproduct')
+
     updateproductinfo.barcode.data = formbarcode
     feedback = logicObject.execute("updateproduct", updateproductinfo)
     return render_template('feedback.html', feedback = feedback)
@@ -286,6 +357,14 @@ def delete_shop(operation):
 
   form = RetrieveShop()
   if request.method == "POST":
+
+    form_validation = form.validateNotEmpty(form.shopId)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for shopid" , redirecturl = '/deleteshop/deleteshop')
+    form_validation = form.validateNumber(form.shopId)
+    if str(form_validation) == 'please enter only numbers':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for shopid" , redirecturl = '/deleteshop/deleteshop')
+
     logicObject = Logic.Logic()
     feedback = logicObject.execute(operation, form)
     return render_template('feedback.html', feedback = feedback)
@@ -315,6 +394,22 @@ def check_update(formshopid):
   updateshopinfo = UpdateShopForm()
   logicObject = Logic.Logic()
   if request.method == "POST":
+
+    form_validation = updateshopinfo.validateNotEmpty(updateshopinfo.address)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for address" , redirecturl = '/updateshop/updateshop')
+    
+    form_validation = updateshopinfo.validateNotEmpty(updateshopinfo.admin)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for admin" , redirecturl = '/updateshop/updateshop')
+    
+    form_validation = updateshopinfo.validateNotEmpty(updateshopinfo.contactNumber)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for contactNumber" , redirecturl = '/updateshop/updateshop')
+    form_validation = updateshopinfo.validateNumber(updateshopinfo.contactNumber)
+    if str(form_validation) == 'please enter only numbers':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for contactNumber" , redirecturl = '/updateshop/updateshop')
+
     updateshopinfo.shopId.data = formshopid
     feedback = logicObject.execute("updateshop", updateshopinfo)
     return render_template('feedback.html', feedback = feedback)
@@ -342,6 +437,14 @@ def retrieve_shop(operation):
 
   form = RetrieveShop()
   if request.method == "POST":
+
+    form_validation = form.validateNotEmpty(form.shopId)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for shopid" , redirecturl = '/retrieveshop/retrieveshop')
+    form_validation = form.validateNumber(form.shopId)
+    if str(form_validation) == 'please enter only numbers':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for shopid" , redirecturl = '/retrieveshop/retrieveshop')
+
     logicObject = Logic.Logic()
     singleshop = logicObject.execute(operation,form)
     if singleshop:
@@ -369,6 +472,30 @@ def enterlocation(operation):
   form = LocationShopForm()
   if request.method == "POST":
     
+    form_validation = form.validateNotEmpty(form.city)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for city" , redirecturl = '/location/addlocation')
+    
+    form_validation = form.validateNotEmpty(form.country)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for country" , redirecturl = '/location/addlocation')
+
+    form_validation = form.validateNotEmpty(form.tax)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for tax" , redirecturl = '/location/addlocation')
+
+    form_validation = form.validateFloat(form.tax)
+    if str(form_validation) == 'please enter valid price':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for tax" , redirecturl = '/location/addlocation')
+
+    form_validation = form.validateNotEmpty(form.distance)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for distance" , redirecturl = '/location/addlocation')
+
+    form_validation = form.validateFloat(form.distance)
+    if str(form_validation) == 'please enter valid price':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for distance" , redirecturl = '/location/addlocation')
+
     logicObject = Logic.Logic()
     feedback = logicObject.execute(operation, form)
     return render_template('feedback.html', feedback = feedback)
@@ -396,7 +523,30 @@ def addshop(operation):
   form = RegisterShopForm()
   form.city.choices = location_choices_city
   form.country.choices = location_choices_country
-  if request.method == "POST": 
+  if request.method == "POST":
+
+    form_validation = form.validateNotEmpty(form.shopId)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for shopid" , redirecturl = '/shop/addshop')
+    form_validation = form.validateNumber(form.shopId)
+    if str(form_validation) == 'please enter only numbers':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for shopid" , redirecturl = '/shop/addshop')
+    
+    form_validation = form.validateNotEmpty(form.address)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for address" , redirecturl = '/shop/addshop')
+    
+    form_validation = form.validateNotEmpty(form.admin)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for admin" , redirecturl = '/shop/addshop')
+    
+    form_validation = form.validateNotEmpty(form.contactNumber)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for contactNumber" , redirecturl = '/shop/addshop')
+    form_validation = form.validateNumber(form.contactNumber)
+    if str(form_validation) == 'please enter only numbers':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for contactNumber" , redirecturl = '/shop/addshop')
+
     city_country_pair = (form.city.data,form.country.data)
     if city_country_pair in loc_city_country:
       feedback = logicObject.execute(operation, form)
@@ -423,6 +573,14 @@ def search_barcode(operation):
 
   form = SearchBarcode()
   if request.method == "POST":
+
+    form_validation = form.validateNotEmpty(form.barcode)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for barcode" , redirecturl = '/productsearch/retrieveproduct')
+    form_validation = form.validateNumber(form.barcode)
+    if str(form_validation) == 'please enter only numbers':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for barcode" , redirecturl = '/productsearch/retrieveproduct')
+
     logicObject = Logic.Logic()
     productobj = logicObject.execute(operation,form)
     if productobj:
@@ -476,7 +634,18 @@ def addmanufacturer(operation):
     return redirect(url_for('signin'))
   form = AddManufacturer()
   if request.method == "POST":
-  
+    
+    form_validation = form.validateNotEmpty(form.manufacturerId)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for manufacturerId" , redirecturl = '/manufacturer/addmanufacturer')
+    form_validation = form.validateNumber(form.manufacturerId)
+    if str(form_validation) == 'please enter only numbers':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for manufacturerId" , redirecturl = '/manufacturer/addmanufacturer')
+
+    form_validation = form.validateNotEmpty(form.mname)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for manufacturer name" , redirecturl = '/manufacturer/addmanufacturer')
+
     logicObject = Logic.Logic()
     feedback = logicObject.execute(operation,form)
     return render_template('feedback.html',feedback = feedback)
@@ -492,7 +661,18 @@ def addcategory(operation):
 
   form = AddCategory()
   if request.method == "POST":
-  
+    
+    form_validation = form.validateNotEmpty(form.categoryId)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for categoryId" , redirecturl = '/category/addcategory')
+    form_validation = form.validateNumber(form.categoryId)
+    if str(form_validation) == 'please enter only numbers':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for categoryId" , redirecturl = '/category/addcategory')
+
+    form_validation = form.validateNotEmpty(form.categoryDescription)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for categoryDescription" , redirecturl = '/category/addcategory')
+
     logicObject = Logic.Logic()
     feedback = logicObject.execute(operation,form)
     return render_template('feedback.html',feedback = feedback)
@@ -509,15 +689,56 @@ def addproduct(operation):
   logicObject = Logic.Logic()
   manufacturers = logicObject.execute('viewmanufacturers',None)
   manufacturer_choices = [(manufacturer.manufacturerId,manufacturer.name) for manufacturer in manufacturers]
-  manufacturer_choices.append(('-1','None'))
+  #manufacturer_choices.append(('-1','None'))
   categories = logicObject.execute('viewcategories',None)
   category_choices =[(category.categoryId,category.categoryDescription) for category in categories]
-  category_choices.append(('-1','None'))
+  #category_choices.append(('-1','None'))
   
   form = AddProduct() 
   form.manufacturerId.choices = manufacturer_choices
   form.category.choices = category_choices
   if request.method == "POST":
+
+    form_validation = form.validateNotEmpty(form.barcode)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for barcode" , redirecturl = '/productadd/addproduct')
+    form_validation = form.validateNumber(form.barcode)
+    if str(form_validation) == 'please enter only numbers':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for barcode" , redirecturl = '/productadd/addproduct')
+
+    form_validation = form.validateNotEmpty(form.proname)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for name" , redirecturl = '/productadd/addproduct')
+
+    form_validation = form.validateNotEmpty(form.price)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for price" , redirecturl = '/productadd/addproduct')
+
+    form_validation = form.validateFloat(form.price)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for price" , redirecturl = '/productadd/addproduct')
+
+    form_validation = form.validateNotEmpty(form.minStock)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for minStock" , redirecturl = '/productadd/addproduct')
+    form_validation = form.validateNumber(form.minStock)
+    if str(form_validation) == 'please enter only numbers':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for minStock" , redirecturl = '/productadd/addproduct')
+
+    form_validation = form.validateNotEmpty(form.cacheStockQty)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for cacheStockQty" , redirecturl = '/productadd/addproduct')
+    form_validation = form.validateNumber(form.cacheStockQty)
+    if str(form_validation) == 'please enter only numbers':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for cacheStockQty" , redirecturl = '/productadd/addproduct')
+
+    form_validation = form.validateNotEmpty(form.bundleUnit)
+    if str(form_validation) == 'Cannot give empty space':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for bundleUnit" , redirecturl = '/productadd/addproduct')
+    form_validation = form.validateNumber(form.bundleUnit)
+    if str(form_validation) == 'please enter only numbers':
+      return render_template('errorstatus.html', statusmessage = form_validation + " for bundleUnit" , redirecturl = '/productadd/addproduct')
+
     if(form.manufacturerId.data == '-1'):
       form.manufacturerId.data = form.manufacturerForm.manufacturerId.data
       feedback = logicObject.execute('addmanufacturer',form.manufacturerForm)
@@ -579,7 +800,7 @@ def defaulterror():
   if 'email' not in session:
     return redirect(url_for('signin'))
 
-  return "Data not present"
+  return render_template('errorstatus.html', statusmessage = "data not present" , redirecturl = '/hq')
 
 #to check the database part works fine
 @app.route('/db')

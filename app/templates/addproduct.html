@@ -22,7 +22,7 @@
 	<div id = "manu-id">
 	<div class="row">
 	<div class = "form-group col-lg-3">
-		<label class="control-label">Enter Manufacturer Id</label>
+		<label class="control-label">Choose Manufacturer </label>
 		<div {% if form.manufacturerId.errors %} class = "has-error" {% else %} class="" {% endif %} >
 			{{ form.manufacturerId(class="form-control") }} 
 		</div>
@@ -44,7 +44,7 @@
 	<div id = "cat-id">
 	<div class="row">
 	<div class = "form-group col-lg-3" >
-		<label class="control-label">Enter Product category</label>
+		<label class="control-label">Choose Product category</label>
 		<div {% if form.category.errors %} class = "has-error" {% else %} class="" {% endif %} >
 			{{ form.category(class="form-control date") }} 
 		</div>
